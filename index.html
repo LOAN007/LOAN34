@@ -96,6 +96,7 @@
     // term picking
     function pickTerm(amt){
       if(amt===5000) return {type:'days',days:12};
+      if(amt>=6000 && amt<=40000) return {type:'months',months:12};
       if(amt===40000) return {type:'months',months:4};
       if(amt===50000) return {type:'months',months:5};
       if(amt>=60000 && amt<=150000) return {type:'months',months:12};
