@@ -202,7 +202,6 @@ function formatCurrency(num){ return num.toLocaleString('en-LK'); }
 function calculateLoan(){
     const amount = parseInt(loanAmountSlider.value);
     let months;
-    if (amount <= 20000) {days = 12; // 5,000 - 20,000} 
     if(amount <= 150000){ months = 12; }
     else if(amount <= 300000){ months = 24; }
     else { months = 30; }
