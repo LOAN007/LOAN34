@@ -2,257 +2,172 @@
 <html lang="si">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AnyCash.lk — Loan Calculator</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>AnyCash.lk — Loan Apply</title>
   <style>
     :root{
-      --bg:#062033; --card:#072033; --accent:#1fb6ff; --muted:#a6b0c2;
-      --glass: rgba(255,255,255,0.02); --radius:12px;
+      --brand:#00a68f;
+      --dark:#063b36;
+      --bg:#e8fbf5;
+      --card:#ffffff;
+      --muted:#416a66;
+      --shadow:0 8px 20px rgba(2,50,45,0.1);
     }
-    *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Arial;}
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,#041022 0%, #06162a 100%); color:#e9f3ff;}
-    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;}
-    .card{width:100%;max-width:920px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:16px;padding:18px;border:1px solid rgba(255,255,255,0.03)}
-    header{display:flex;gap:12px;align-items:center;margin-bottom:14px}
-    .logo{width:56px;height:56px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#042033;background:linear-gradient(90deg,var(--accent),#6ee7b7)}
-    h1{margin:0;font-size:18px}
-    p.lead{margin:0;color:var(--muted);font-size:13px}
-    .grid{display:grid;grid-template-columns:1fr;gap:14px}
-    .section{background:var(--glass);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
-    .slider-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-    .amount-display{font-size:26px;font-weight:800;min-width:160px} /* bigger */
-    input[type="range"]{width:100%; height:16px;} /* bigger slider */
-    .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
-    .apply-btn{background:linear-gradient(90deg,var(--accent),#6ee7b7);color:#042033;padding:12px 16px;border-radius:10px;border:none;cursor:pointer;font-weight:800;text-decoration:none;display:inline-block;text-align:center;}
-    .secondary{background:transparent;border:1px solid rgba(255,255,255,0.05);color:var(--muted);padding:10px 14px;border-radius:10px;cursor:pointer}
-    label.small{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
-    input[type="text"]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
-    .result-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0));margin-bottom:8px}
-    .muted{color:var(--muted);font-size:13px}
-    .big{font-size:20px;font-weight:800}
-    footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px;flex-wrap:wrap}
-    .note{font-size:12px;color:var(--muted)}
-    @media(min-width:860px){ .grid{grid-template-columns:1fr 380px} .logo{width:68px;height:68px} }
-    @media(max-width:420px){ .card{padding:14px} .amount-display{font-size:22px} .apply-btn{width:100%} }
-    .back-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:6px}
-    /* language modal */
-    .lang-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:9999}
-    .lang-box{background:#021826;padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);width:90%;max-width:420px;text-align:center}
-    .lang-btn{display:inline-block;padding:12px 16px;border-radius:10px;margin:8px;border:none;cursor:pointer;font-weight:700}
-    .lang-si{background:linear-gradient(90deg,#6ee7b7,var(--accent));color:#042033}
-    .lang-en{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-    .small-note{font-size:13px;color:var(--muted);margin-top:8px}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;padding:0;font-family:system-ui,Segoe UI,Roboto;background:var(--bg);color:var(--dark);}
+    .app{min-height:100vh;display:flex;flex-direction:column;padding:16px;}
+    .card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:16px;}
+    .brand{font-weight:800;font-size:20px;}
+    .brand b{color:var(--brand);}
+    .small{color:var(--muted);font-size:13px;}
+    .amount-val{font-size:28px;font-weight:800;}
+    input[type=range]{-webkit-appearance:none;width:100%;height:14px;background:#e2f3ef;border-radius:999px;}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--brand);border:3px solid #fff;box-shadow:0 3px 6px rgba(0,0,0,.25);cursor:pointer;}
+    .btn{width:100%;border:none;border-radius:12px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;background:var(--brand);color:#fff;}
+    .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eef4f3;}
+    .k{color:var(--muted);font-size:14px;}
+    .v{font-weight:700;font-size:16px;}
+    table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px;}
+    th,td{padding:8px;border-bottom:1px solid #eef4f3;text-align:left;}
+    th{font-weight:700;color:var(--dark);}
+    .back{background:none;border:none;color:var(--brand);font-weight:700;font-size:14px;cursor:pointer;margin-bottom:10px;}
   </style>
 </head>
 <body>
-  <!-- Language modal -->
-  <div class="lang-modal" id="langModal" aria-hidden="false">
-    <div class="lang-box" role="dialog" aria-modal="true">
-      <h2 id="langTitle">Select language / භාෂාව තෝරන්න</h2>
-      <p class="small-note" id="langSubtitle">Choose your preferred language to view the calculator.</p>
-      <div style="margin-top:12px">
-        <button class="lang-btn lang-si" id="chooseSi">සිංහල — Sinhala</button>
-        <button class="lang-btn lang-en" id="chooseEn">English</button>
+  <div class="app">
+
+    <!-- Page 1 -->
+    <div id="page1" class="card">
+      <div class="brand">Any<b>Cash.lk</b></div>
+      <p class="small">ඔබට අවශ්‍ය මුදල තෝරන්න</p>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div class="small">තෝරාගත් මුදල</div>
+        <div id="amtLabel" class="amount-val">රු 5,000</div>
+      </div>
+
+      <input id="amount" type="range" min="5000" max="600000" step="1000" value="5000"/>
+      <div style="display:flex;justify-content:space-between;" class="small"><span>රු 5,000</span><span>රු 600,000</span></div>
+
+      <br>
+      <button id="applyBtn" class="btn">Apply කරන්න</button>
+      <p class="small" id="noteText">රු 5,000 සඳහා දින 12න් එක්වරම ගෙවිය යුතුය.</p>
+    </div>
+
+    <!-- Page 2 -->
+    <div id="page2" class="card" style="display:none;">
+      <button id="backBtn" class="back">← ආපසු</button>
+      <h3 class="brand">ගෙවීම් විස්තර</h3>
+      <div class="row"><div class="k">මුදල</div><div class="v" id="dAmount">—</div></div>
+      <div class="row"><div class="k">කාලය</div><div class="v" id="dTerm">—</div></div>
+      <div class="row"><div class="k">මාසික වාරිකය</div><div class="v" id="dEMI">—</div></div>
+      <div class="row"><div class="k">මුළු ගෙවිය යුතු මුදල</div><div class="v" id="dTotal">—</div></div>
+      <p class="small" id="dNote"></p>
+
+      <div id="scheduleWrap" style="display:none;">
+        <strong>වාරික වගුව</strong>
+        <table>
+          <thead><tr><th>මාසය</th><th>වාරික</th><th>ඉතිරි මුදල</th></tr></thead>
+          <tbody id="schedBody"></tbody>
+        </table>
       </div>
     </div>
+
   </div>
 
-  <div class="wrap">
-    <div class="card" id="appCard" aria-live="polite">
-      <header>
-        <div class="logo">AC</div>
-        <div>
-          <h1 id="title">AnyCash.lk — Quick Loan</h1>
-          <p class="lead" id="subtitle">View payment plan — Interest 8% p.a.</p>
-        </div>
-        <div style="margin-left:auto">
-          <button class="secondary" id="switchLang">සිං/EN</button>
-        </div>
-      </header>
+  <script>
+    const amtInput=document.getElementById("amount");
+    const amtLabel=document.getElementById("amtLabel");
+    const noteText=document.getElementById("noteText");
+    const applyBtn=document.getElementById("applyBtn");
+    const page1=document.getElementById("page1");
+    const page2=document.getElementById("page2");
+    const backBtn=document.getElementById("backBtn");
+    const dAmount=document.getElementById("dAmount");
+    const dTerm=document.getElementById("dTerm");
+    const dEMI=document.getElementById("dEMI");
+    const dTotal=document.getElementById("dTotal");
+    const dNote=document.getElementById("dNote");
+    const scheduleWrap=document.getElementById("scheduleWrap");
+    const schedBody=document.getElementById("schedBody");
 
-      <div class="grid">
-        <!-- selector -->
-        <div class="section" id="page1">
-          <label class="small" id="lblAmount">Selected Amount</label>
-          <div class="slider-row">
-            <div class="amount-display" id="amountDisplay">රු. 50,000</div>
-            <div class="range-wrap">
-              <input type="range" id="amountRange" min="5000" max="600000" step="1000" value="50000" />
-              <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:6px">
-                <span id="minLabel">රු.5,000</span><span id="maxLabel">රු.600,000</span>
-              </div>
-            </div>
-          </div>
+    function toLKR(n){return "රු "+n.toLocaleString("si-LK");}
 
-          <div class="controls" style="margin-top:12px">
-            <a class="apply-btn" id="applyBtn" href="#">Apply</a>
-            <button class="secondary" id="calcPreviewBtn">Quick Preview</button>
-            <div style="margin-left:auto" class="note" id="rateNote">Interest: <strong>8% p.a.</strong></div>
-          </div>
-
-          <div style="margin-top:12px;color:var(--muted);font-size:13px" id="notesBlock">
-            Notes: 5000 → 12 days. 6000–40000 → 5 months. 50000 → 5 months. 60000–150000 → 12 months. 150001–300000 → 24 months. 300001–600000 → 30 months.
-          </div>
-        </div>
-
-        <!-- results -->
-        <div class="section" id="page2" style="display:none;">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div>
-              <h3 class="result-title" id="resultTitle">Payment summary</h3>
-              <div class="muted" id="youChose">You selected — <span id="summaryAmountText">රු. 50,000</span></div>
-            </div>
-            <div>
-              <button class="back-btn" id="backBtn">◀ Back</button>
-            </div>
-          </div>
-
-          <div style="margin-top:12px">
-            <div class="result-row"><div class="muted" id="lblPrincipal">Principal</div><div class="big" id="principalVal">රු. 50,000</div></div>
-            <div class="result-row"><div class="muted" id="lblInterest">Interest (total at 8% p.a.)</div><div class="big" id="interestVal">රු. 0.00</div></div>
-            <div class="result-row"><div class="muted" id="lblTotal">Total payable</div><div class="big" id="totalVal">රු. 0.00</div></div>
-            <div class="result-row"><div class="muted" id="termLabel">Term (months)</div><div class="big" id="termVal">12 months</div></div>
-            <div class="result-row"><div class="muted" id="lblInstallment">Monthly / Installment</div><div class="big" id="installmentVal">රු. 0.00</div></div>
-          </div>
-
-          <footer>
-            <div class="note" id="calcNote">Interest (Annual): <strong>8%</strong> — EMI calculated using amortization for monthly terms; 12-day case uses simple interest.</div>
-            <div style="display:flex;gap:8px">
-              <button class="secondary" id="editBtn">Edit Amount</button>
-              <a class="apply-btn" id="confirmBtn" href="YOUR_LINK_HERE">Confirm & Proceed</a>
-            </div>
-          </footer>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<script>
-  const STR = {
-    en: {
-      title: "AnyCash.lk — Quick Loan",
-      subtitle: "View payment plan — Interest 8% p.a.",
-      selectedAmount: "Selected Amount",
-      rateNote: "Interest: 8% p.a.",
-      notes: "Notes: 5000 → 12 days. 6000–40000 → 5 months. 50000 → 5 months. 60000–150000 → 12 months. 150001–300000 → 24 months. 300001–600000 → 30 months.",
-      apply: "Apply",
-      quickPreview: "Quick Preview",
-      paymentSummary: "Payment summary",
-      youSelected: "You selected —",
-      principal: "Principal",
-      interest: "Interest (total at 8% p.a.)",
-      totalPayable: "Total payable",
-      termMonths: "Term (months)",
-      monthlyInstallment: "Monthly / Installment",
-      calcNote: "Interest (Annual): 8% — EMI calculated using amortization for monthly terms; 12-day case uses simple interest.",
-      edit: "Edit Amount",
-      confirm: "Confirm & Proceed",
-      langTitle: "Select language / භාෂාව තෝරන්න",
-      langSubtitle: "Choose your preferred language to view the calculator.",
-      chooseSi: "සිංහල — Sinhala",
-      chooseEn: "English"
-    },
-    si: {
-      title: "AnyCash.lk — ණය ගණකය",
-      subtitle: "ගෙවීම් සැලැස්ම බලන්න — පොලී 8% වාර්ෂික",
-      selectedAmount: "තෝරාගත් මුදල",
-      rateNote: "පොලී: 8% වාර්ෂික",
-      notes: "සටහන්: 5000 → 12 දින. 6000–40000 → 5 මාස. 50000 → 5 මාස. 60000–150000 → 12 මාස. 150001–300000 → 24 මාස. 300001–600000 → 30 මාස.",
-      apply: "අයදුම් කරන්න",
-      quickPreview: "කෙටි පෙරදසුන",
-      paymentSummary: "ගෙවීම් සාරාංශය",
-      youSelected: "ඔබ තෝරලා තියෙන්නේ —",
-      principal: "මූලය",
-      interest: "පොලී (එකතුව 8% වාර්ෂික)",
-      totalPayable: "ගෙවිය යුතු මුළු මුදල",
-      termMonths: " කාලය (මාස)",
-      monthlyInstallment: "මාසික / වාරිකය",
-      calcNote: "පොලී (වාර්ෂික): 8% — මාසික කාලයන් සඳහා EMI amortization ක්‍රමය භාවිතා කරනවා; 12-දින සඳහා simple interest.",
-      edit: "මුදල වෙනස් කරන්න",
-      confirm: "තහවුරු කිරීම & ඉදිරියට",
-      langTitle: "භාෂාව තෝරන්න / Select language",
-      langSubtitle: "විකල්ප භාෂාව තෝරන්න",
-      chooseSi: "සිංහල — Sinhala",
-      chooseEn: "English"
+    // term picking
+    function pickTerm(amt){
+      if(amt===5000) return {type:'days',days:12};
+      if(amt===40000) return {type:'months',months:4};
+      if(amt===50000) return {type:'months',months:5};
+      if(amt>=60000 && amt<=150000) return {type:'months',months:12};
+      if(amt>150000 && amt<=300000) return {type:'months',months:24};
+      if(amt>300000 && amt<=600000) return {type:'months',months:30};
+      return {type:'months',months:6};
     }
-  };
 
-  // ---------- DOM refs ----------
-  const langModal = document.getElementById('langModal');
-  const chooseSi = document.getElementById('chooseSi');
-  const chooseEn = document.getElementById('chooseEn');
-  const switchLang = document.getElementById('switchLang');
+    function showNote(amt){
+      const plan=pickTerm(amt);
+      if(plan.type==='days'){
+        noteText.textContent=රු ${amt.toLocaleString()} සඳහා දින ${plan.days}න් එක්වරම ගෙවිය යුතුය.;
+      }else{
+        noteText.textContent=රු ${amt.toLocaleString()} සඳහා මාස ${plan.months} වාරික ගෙවිය යුතුය.;
+      }
+    }
 
-  const titleEl = document.getElementById('title');
-  const subtitleEl = document.getElementById('subtitle');
-  const lblAmount = document.getElementById('lblAmount');
-  const rateNote = document.getElementById('rateNote');
-  const notesBlock = document.getElementById('notesBlock');
-  const applyBtn = document.getElementById('applyBtn');
-  const calcPreviewBtn = document.getElementById('calcPreviewBtn');
-  const page1 = document.getElementById('page1');
-  const page2 = document.getElementById('page2');
-  const amountRange = document.getElementById('amountRange');
-  const amountDisplay = document.getElementById('amountDisplay');
-  const summaryAmountText = document.getElementById('summaryAmountText');
-  const principalVal = document.getElementById('principalVal');
-  const interestVal = document.getElementById('interestVal');
-  const totalVal = document.getElementById('totalVal');
-  const termVal = document.getElementById('termVal');
-  const termLabel = document.getElementById('termLabel');
-  const installmentVal = document.getElementById('installmentVal');
-  const backBtn = document.getElementById('backBtn');
-  const editBtn = document.getElementById('editBtn');
-  const confirmBtn = document.getElementById('confirmBtn');
-  const resultTitle = document.getElementById('resultTitle');
-  const youChose = document.getElementById('youChose');
-  const lblPrincipal = document.getElementById('lblPrincipal');
-  const lblInterest = document.getElementById('lblInterest');
-  const lblTotal = document.getElementById('lblTotal');
-  const lblInstallment = document.getElementById('lblInstallment');
-  const calcNote = document.getElementById('calcNote');
-  const minLabel = document.getElementById('minLabel');
-  const maxLabel = document.getElementById('maxLabel');
+    amtInput.addEventListener("input",()=>{
+      const val=Number(amtInput.value);
+      amtLabel.textContent=toLKR(val);
+      showNote(val);
+    });
 
-  let LANG = 'si'; // default
-  const annualRate = 0.08;
+    function showDetails(amount){
+      const plan=pickTerm(amount);
+      dAmount.textContent=toLKR(amount);
+      const apr=0.08;
+      if(plan.type==='days'){
+        dTerm.textContent=දින ${plan.days};
+        const dailyRate=apr/365;
+        const interest=amount*dailyRate*plan.days;
+        const total=Math.round(amount+interest);
+        dEMI.textContent="එක්වර ගෙවීම";
+        dTotal.textContent=toLKR(total);
+        dNote.textContent=APR 8% අනුව ගණනය කරන ලදී.;
+        scheduleWrap.style.display="none";
+      }else{
+        const n=plan.months;
+        dTerm.textContent=මාස ${n};
+        const r=apr/12;
+        const emi=Math.round((amount*r)/(1-Math.pow(1+r,-n)));
+        const total=emi*n;
+        dEMI.textContent=toLKR(emi);
+        dTotal.textContent=toLKR(total);
+        dNote.textContent="APR 8% අනුව ගණනය කරන ලදී.";
+        schedBody.innerHTML="";
+        let balance=amount;
+        for(let m=1;m<=n;m++){
+          const interest=balance*r;
+          const principal=Math.min(emi-interest,balance);
+          balance=Math.max(0,balance-principal);
+          const tr=document.createElement("tr");
+          tr.innerHTML=<td>${m}</td><td>${toLKR(emi)}</td><td>${toLKR(Math.round(balance))}</td>;
+          schedBody.appendChild(tr);
+        }
+        scheduleWrap.style.display="block";
+      }
+    }
 
-  function fmt(n){ return 'රු. ' + Number(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
-  function fmtInt(n){ return 'රු. ' + Number(n).toLocaleString('en-US', {minimumFractionDigits:0}); }
+    applyBtn.addEventListener("click",()=>{
+      const amt=Number(amtInput.value);
+      showDetails(amt);
+      page1.style.display="none";
+      page2.style.display="block";
+    });
+    backBtn.addEventListener("click",()=>{
+      page2.style.display="none";
+      page1.style.display="block";
+    });
 
-  function detectTermAndType(amount){
-    const a = Number(amount);
-    if (a === 5000) return {type:'days', term:12};
-    if (a >= 6000 && a <= 40000) return {type:'months', term:5};
-    if (a === 50000) return {type:'months', term:5};
-    if (a >= 60000 && a <= 150000) return {type:'months', term:12};
-    if (a > 150000 && a <= 300000) return {type:'months', term:24};
-    if (a > 300000 && a <= 600000) return {type:'months', term:30};
-    if (a < 6000) return {type:'months', term:1};
-    if (a < 50000) return {type:'months', term:5};
-    if (a <= 150000) return {type:'months', term:12};
-    if (a <= 300000) return {type:'months', term:24};
-    return {type:'months', term:30};
-  }
-
-  function calculate(amount){
-    const principal = Number(amount);
-    const termInfo = detectTermAndType(principal);
-    let interestTotal = 0;
-    let totalPayable = 0;
-    let installment = 0;
-
-    if (termInfo.type === 'days'){
-      const days = termInfo.term;
-      interestTotal = principal * annualRate * (days / 365);
-      totalPayable = principal + interestTotal;
-      installment = totalPayable;
-    } else {
-      const n = termInfo.term;
-      const monthlyRate = annualRate / 12;
-      if (monthlyRate === 0) {
-        installment = principal / n;
-        interestTotal = 0;
-        totalPayable = principal;
-      } else {
-        const r =
+    // initialize
+    showNote(5000);
+  </script>
+</body>
+</html>
