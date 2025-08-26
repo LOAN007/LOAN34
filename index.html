@@ -1,125 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnyCash.lk Loan Calculator</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: #f4f4f4;
-        }
-
-        .container {
-            background: #fff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        input[type=range] {
-            width: 100%;
-            margin: 20px 0;
-        }
-
-        button {
-            padding: 12px 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .details {
-            text-align: left;
-            margin-top: 20px;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .details p {
-            margin: 10px 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnyCash.lk Loan Calculator</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
+    body{display:flex;justify-content:center;align-items:center;min-height:100vh;background:#f4f4f4;}
+    .container{background:#fff;padding:30px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.2);text-align:center;width:90%;max-width:400px;}
+    input[type=range]{width:100%;margin:20px 0;}
+    button{padding:12px 20px;background-color:#007BFF;color:white;border:none;border-radius:10px;cursor:pointer;font-size:16px;margin-bottom:20px;}
+    button:hover{background-color:#0056b3;}
+    .details{text-align:left;margin-top:20px;background:#f9f9f9;padding:15px;border-radius:10px;}
+    .details p{margin:10px 0;}
+    /* Language modal */
+    .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:flex;justify-content:center;align-items:center;}
+    .modal-content{background:#fff;padding:20px;border-radius:10px;text-align:center;}
+    .lang-btn{margin:10px;padding:10px 20px;border:none;border-radius:8px;background:#007BFF;color:#fff;font-size:16px;cursor:pointer;}
+    .lang-btn:hover{background:#0056b3;}
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>AnyCash.lk Loan Calculator</h1>
-        <label for="loanAmount">Loan Amount: <span id="amountDisplay">5000</span> LKR</label>
-        <input type="range" id="loanAmount" min="5000" max="600000" step="1000" value="5000">
 
-        <button id="applyBtn">Apply</button>
-
-        <div class="details" id="loanDetails">
-            <p><strong>Monthly Installment:</strong> <span id="monthly">-</span> LKR</p>
-            <p><strong>Total Payable:</strong> <span id="total">-</span> LKR</p>
-            <p><strong>Interest Rate:</strong> 8%</p>
-            <p><strong>Repayment Period:</strong> <span id="months">-</span> months</p>
-        </div>
+  <!-- Language selector modal -->
+  <div class="modal" id="langModal">
+    <div class="modal-content">
+      <h2>Please Select Language / කරුණාකර භාෂාව තෝරන්න</h2>
+      <button class="lang-btn" onclick="setLanguage('en')">English</button>
+      <button class="lang-btn" onclick="setLanguage('si')">සිංහල</button>
     </div>
+  </div>
 
-    <script>
-        const loanAmountSlider = document.getElementById('loanAmount');
-        const amountDisplay = document.getElementById('amountDisplay');
-        const applyBtn = document.getElementById('applyBtn');
+  <div class="container" id="mainContainer" style="display:none;">
+      <h1 id="title">AnyCash.lk Loan Calculator</h1>
+      <label for="loanAmount" id="loanLabel">Loan Amount: <span id="amountDisplay">5000</span> LKR</label>
+      <input type="range" id="loanAmount" min="5000" max="600000" step="1000" value="5000">
 
-        const monthlyEl = document.getElementById('monthly');
-        const totalEl = document.getElementById('total');
-        const monthsEl = document.getElementById('months');
+      <button id="applyBtn">Apply</button>
 
-        const interestRate = 0.08; // 8%
+      <div class="details" id="loanDetails">
+          <p><strong id="monthlyLabel">Monthly Installment:</strong> <span id="monthly">-</span> LKR</p>
+          <p><strong id="totalLabel">Total Payable:</strong> <span id="total">-</span> LKR</p>
+          <p><strong id="rateLabel">Interest Rate:</strong> 8%</p>
+          <p><strong id="periodLabel">Repayment Period:</strong> <span id="months">-</span> months</p>
+      </div>
+  </div>
 
-        function calculateLoan() {
-            const amount = parseInt(loanAmountSlider.value);
-            amountDisplay.textContent = amount;
+<script>
+  const langModal = document.getElementById('langModal');
+  const mainContainer = document.getElementById('mainContainer');
 
-            let months;
-            if(amount === 5000){
-                months = 12;
-            } else if(amount >= 6000 && amount <= 50000){
-                months = 12;
-            } else if(amount >= 60000 && amount <= 150000){
-                months = 12;
-            } else if(amount >= 150001 && amount <= 300000){
-                months = 24;
-            } else if(amount >= 300001 && amount <= 600000){
-                months = 30;
-            }
+  let currentLang = 'en';
 
-            const totalPayable = amount + (amount * interestRate);
-            const monthlyInstallment = totalPayable / months;
+  const translations = {
+    en: {
+      title: "AnyCash.lk Loan Calculator",
+      loanLabel: "Loan Amount:",
+      applyBtn: "Apply",
+      monthlyLabel: "Monthly Installment:",
+      totalLabel: "Total Payable:",
+      rateLabel: "Interest Rate:",
+      periodLabel: "Repayment Period:",
+      monthsText: "months"
+    },
+    si: {
+      title: "AnyCash.lk ණය ගණකය",
+      loanLabel: "ණය මුදල:",
+      applyBtn: "අයදුම් කරන්න",
+      monthlyLabel: "මාසික ගෙවීම:",
+      totalLabel: "මුළු ගෙවිය යුතු මුදල:",
+      rateLabel: "පොළී අනුපාතය:",
+      periodLabel: "ගෙවීම් කාලය:",
+      monthsText: "මාස"
+    }
+  };
 
-            monthlyEl.textContent = monthlyInstallment.toFixed(2);
-            totalEl.textContent = totalPayable.toFixed(2);
-            monthsEl.textContent = months;
-        }
+  function setLanguage(lang){
+    currentLang = lang;
+    langModal.style.display = "none";
+    mainContainer.style.display = "block";
 
-        loanAmountSlider.addEventListener('input', calculateLoan);
-        applyBtn.addEventListener('click', calculateLoan);
+    const t = translations[lang];
+    document.getElementById('title').textContent = t.title;
+    document.getElementById('loanLabel').childNodes[0].textContent = t.loanLabel + " ";
+    document.getElementById('applyBtn').textContent = t.applyBtn;
+    document.getElementById('monthlyLabel').textContent = t.monthlyLabel;
+    document.getElementById('totalLabel').textContent = t.totalLabel;
+    document.getElementById('rateLabel').textContent = t.rateLabel;
+    document.getElementById('periodLabel').childNodes[0].textContent = t.periodLabel + " ";
+    monthsEl.textContent = "- " + t.monthsText;
+  }
 
-        // Initial calculation
-        calculateLoan();
-    </script>
+  // Loan Calculation
+  const loanAmountSlider = document.getElementById('loanAmount');
+  const amountDisplay = document.getElementById('amountDisplay');
+  const applyBtn = document.getElementById('applyBtn');
+
+  const monthlyEl = document.getElementById('monthly');
+  const totalEl = document.getElementById('total');
+  const monthsEl = document.getElementById('months');
+
+  const annualRate = 0.08; // 8% per year
+
+  function formatCurrency(num) {
+      return num.toLocaleString('en-LK', {minimumFractionDigits: 2});
+  }
+
+  function calculateLoan() {
+      const amount = parseInt(loanAmountSlider.value);
+
+      let months;
+      if(amount <= 150000){
+          months = 12;
+      } else if(amount <= 300000){
+          months = 24;
+      } else {
+          months = 30;
+      }
+
+      const totalInterest = amount * annualRate * (months / 12);
+      const totalPayable = amount + totalInterest;
+      const monthlyInstallment = totalPayable / months;
+
+      amountDisplay.textContent = formatCurrency(amount);
+      monthlyEl.textContent = formatCurrency(monthlyInstallment);
+      totalEl.textContent = formatCurrency(totalPayable);
+      monthsEl.textContent = months + " " + translations[currentLang].monthsText;
+  }
+
+  loanAmountSlider.addEventListener('input', calculateLoan);
+  applyBtn.addEventListener('click', calculateLoan);
+</script>
+
 </body>
 </html>
