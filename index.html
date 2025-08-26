@@ -1,259 +1,162 @@
 <!doctype html>
 <html lang="si">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AnyCash.lk — Loan (Single File)</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AnyCash.lk — Slider with ticks</title>
 <style>
   :root{
-    --accent:#0b74de;
-    --bg:#f7f9fb;
-    --card:#ffffff;
-    --text:#111827;
-    --muted:#6b7280;
+    --accent:#0b74de; --bg:#f7f9fb; --card:#fff; --text:#111;
+    --muted:#6b7280; --tick:#cbd5e1;
   }
   *{box-sizing:border-box}
-  html,body{height:100%}
   body{
-    margin:0;
-    font-family:Inter, Roboto, "Noto Sans Sinhala", Arial, sans-serif;
-    background:linear-gradient(180deg,#eef6ff 0%,var(--bg) 100%);
-    color:var(--text);
-    -webkit-font-smoothing:antialiased;
+    margin:0;font-family:Inter, Roboto, "Noto Sans Sinhala", Arial, sans-serif;
+    background:linear-gradient(180deg,#eef6ff 0%,var(--bg) 100%);color:var(--text);
   }
   .wrap{max-width:980px;margin:18px auto;padding:16px}
-  .card{
-    background:var(--card);
-    border-radius:12px;
-    padding:18px;
-    box-shadow:0 6px 18px rgba(15,23,42,0.06);
-  }
-  .header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}
-  .brand{display:flex;gap:12px;align-items:center}
-  .logo{width:54px;height:54px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:20px}
-  .langswitch{display:flex;gap:8px;align-items:center}
-  .lang-btn{border:1px solid transparent;padding:8px 10px;border-radius:8px;background:transparent;cursor:pointer}
-  .lang-btn.active{background:var(--accent);color:white;border-color:rgba(0,0,0,0.04)}
-  .main{display:flex;gap:18px;align-items:flex-start;justify-content:space-between}
-  .left,.right{flex:1}
-  .right{max-width:360px}
-  h1{font-size:20px;margin:6px 0 12px}
+  .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+  .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .logo{width:50px;height:50px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+  .main{display:flex;gap:18px}
+  .left{flex:1}
+  .right{width:320px}
+  h1{font-size:20px;margin:6px 0}
   .small{font-size:13px;color:var(--muted)}
-  .slider-wrap{padding:12px 8px}
   .amount-val{font-size:28px;font-weight:700;margin:8px 0}
-  .range-input{width:100%}
-  .apply-btn{display:inline-block;padding:12px 18px;border-radius:10px;background:var(--accent);color:white;text-decoration:none;font-weight:600;border:none;cursor:pointer}
-  .code-row{margin-top:12px}
-  .input,.inline-input{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eef8;background:#fbfdff}
-  .inline-row{display:flex;gap:8px}
-  .inline-row .inline-input{flex:1}
+  input[type="range"]{width:100%;}
+  .apply-btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--accent);color:#fff;border:none;cursor:pointer}
+  .inline-row{display:flex;gap:8px;align-items:center}
+  .inline-row input[type="number"]{width:140px;padding:8px;border-radius:8px;border:1px solid #e6eef8}
+  .ticks{position:relative;height:40px;margin-top:8px}
+  /* tick bar */
+  .ticks .bar{height:4px;background:#e6eef8;border-radius:6px;position:absolute;left:0;right:0;top:16px}
+  .tick{position:absolute;top:8px;width:2px;height:24px;background:var(--tick);transform:translateX(-1px)}
+  .tick-label{position:absolute;top:34px;font-size:12px;color:var(--muted);transform:translateX(-50%);white-space:nowrap}
+  /* style for slider thumb to be more visible */
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;height:18px;width:18px;border-radius:50%;background:var(--accent);box-shadow:0 2px 6px rgba(10,20,60,0.2);margin-top:-7px;
+  }
+  input[type=range]::-moz-range-thumb{height:18px;width:18px;border-radius:50%;background:var(--accent);border:none}
   .info{background:#f8fafc;border-radius:10px;padding:12px;margin-top:12px;color:var(--muted)}
-  footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
-  .secondary-card{background:linear-gradient(180deg,#ffffff,#fbfdff);padding:14px;border-radius:10px}
+  .summary{background:linear-gradient(180deg,#fff,#fbfdff);padding:14px;border-radius:10px}
   .hidden{display:none}
-  /* second page */
-  .page{display:none}
-  .page.active{display:block}
-  .back-btn{background:#eef2ff;border:none;padding:8px 10px;border-radius:8px;cursor:pointer}
-  .big-num{font-size:32px;font-weight:800}
-  .summary-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
-  /* responsive */
   @media (max-width:720px){
-    .wrap{padding:8px;margin:0}
     .main{flex-direction:column}
-    .right{max-width:100%}
-    .logo{width:48px;height:48px}
-    body{background:var(--bg)}
-    .card{border-radius:0;min-height:100vh;padding:16px}
-    footer{position:fixed;bottom:0;left:0;right:0;padding:12px;background:transparent}
+    .right{width:100%}
+    .card{border-radius:0;min-height:100vh}
   }
 </style>
 </head>
 <body>
-<div class="wrap">
-
-  <!-- PAGE: main -->
-  <div id="page-main" class="page active card">
-    <div class="header">
-      <div class="brand">
-        <div class="logo">AC</div>
-        <div>
-          <div id="brandTitle">AnyCash.lk</div>
-          <div class="small" id="brandSubtitle">ඉක්මන් සහ සරල ණය</div>
-        </div>
-      </div>
-
-      <div class="langswitch" aria-hidden="false">
-        <button class="lang-btn active" data-lang="si" id="btn-si">සිංහල</button>
-        <button class="lang-btn" data-lang="en" id="btn-en">English</button>
-      </div>
-    </div>
-
-    <div class="main">
-      <div class="left">
-        <h1 id="lead">ඔබට අවශ්‍ය මුදල තෝරන්න</h1>
-
-        <div class="slider-wrap">
-          <div class="small" id="minmax">රු.5,000 — රු.600,000</div>
-          <div class="amount-val" id="amountDisplay">රු.50,000</div>
-
-          <input id="amountRange" class="range-input" type="range" min="5000" max="600000" step="1000" value="50000">
-
-          <div class="info" id="termInfo">අදාල කාල පරාසය: <strong id="termText">12 මාස</strong></div>
-
-          <div style="margin-top:12px">
-            <div class="small" id="enterCodeLabel">Promo / Referral Code (optional)</div>
-            <div class="inline-row code-row">
-              <input id="codeInput" class="inline-input" placeholder="Enter code (optional)">
-              <button id="goApply" class="apply-btn">Apply</button>
-            </div>
-            <div class="small" style="margin-top:8px" id="noteText">Apply බොත්තම ඔබන්න — දෙවැනි පිටුවේ ගෙවීමේ විස්තර දර්ශනය වේ.</div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="right">
-        <div class="secondary-card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div>
-              <div class="small" id="summaryTitle">Loan Summary</div>
-              <div id="summarySubtitle" class="small">Interest rate: 8% p.a.</div>
-            </div>
-            <div style="text-align:right">
-              <div class="small">Selected</div>
-              <div id="summaryAmount" style="font-weight:700">රු.50,000</div>
-            </div>
-          </div>
-
-          <div style="margin-top:12px" id="calcPreview">
-            <div class="small" id="estLabel">Estimated monthly</div>
-            <div style="font-size:22px;font-weight:700" id="monthlyPreview">රු.4,400</div>
-            <div class="small" id="totalPreview">Total to pay: රු.52,800</div>
-          </div>
-
-          <div style="margin-top:14px" class="small">
-            <strong>Note:</strong> මේක estimator එකක්. Apply කිරීමට Apply බොත්තම ඔබන්න.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <footer>
-      <div class="small">AnyCash.lk • © <span id="year"></span></div>
-    </footer>
-  </div>
-
-  <!-- PAGE: apply / second -->
-  <div id="page-apply" class="page card" aria-hidden="true">
-    <div style="display:flex;justify-content:space-between;align-items:center">
+<div class="wrap card">
+  <div class="header">
+    <div style="display:flex;gap:12px;align-items:center">
+      <div class="logo">AC</div>
       <div>
-        <button id="backBtn" class="back-btn">&larr; <span id="backText">Back</span></button>
-      </div>
-      <div style="text-align:right">
-        <div id="applyTitle" style="font-weight:700">Apply — Payment Details</div>
-        <div class="small" id="applySubtitle">Interest rate: 8% p.a.</div>
+        <div style="font-weight:700">AnyCash.lk</div>
+        <div class="small" id="brandSubtitle">ඉක්මන් සහ සරල ණය</div>
       </div>
     </div>
-
-    <div style="margin-top:18px">
-      <div class="small">Selected amount</div>
-      <div class="big-num" id="applyAmount">රු.50,000</div>
-
-      <div class="summary-row">
-        <div>
-          <div class="small">Term</div>
-          <div id="applyTerm" style="font-weight:700">12 months</div>
-        </div>
-
-        <div>
-          <div class="small">Monthly installment</div>
-          <div id="applyMonthly" style="font-weight:700">රු.4,400</div>
-        </div>
-
-        <div>
-          <div class="small">Total to pay</div>
-          <div id="applyTotal" style="font-weight:700">රු.52,800</div>
-        </div>
-      </div>
-
-      <div style="margin-top:14px" class="info">
-        <div class="small"><strong>පොලී අනුපාතය:</strong> 8% p.a.</div>
-        <div style="margin-top:8px" id="applyCodeRow"><strong>Code:</strong> <span id="applyCode">—</span></div>
-      </div>
-
-      <div style="margin-top:18px">
-        <button id="confirmBtn" class="apply-btn">Confirm & Proceed</button>
-      </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button id="btn-si" style="padding:6px 8px;border-radius:6px;background:var(--accent);color:#fff;border:none">සිංහල</button>
+      <button id="btn-en" style="padding:6px 8px;border-radius:6px;border:1px solid #e6eef8;background:#fff">English</button>
     </div>
   </div>
 
+  <div class="main">
+    <div class="left">
+      <h1 id="lead">ඔබට අවශ්‍ය මුදල තෝරන්න</h1>
+      <div class="small" id="minmax">රු.5,000 — රු.600,000</div>
+
+      <div class="amount-val" id="amountDisplay">රු.50,000</div>
+
+      <!-- Range input (continuous but step 1000) -->
+      <input id="amountRange" type="range" min="5000" max="600000" step="1000" value="50000">
+
+      <!-- ticks bar with major positions -->
+      <div class="ticks" id="ticksContainer">
+        <div class="bar"></div>
+        <!-- ticks will be injected by JS -->
+      </div>
+
+      <div style="margin-top:12px" class="inline-row">
+        <label class="small">අගය (Type):</label>
+        <input id="amountNumber" type="number" min="5000" max="600000" step="1000" value="50000">
+        <button id="snapBtn" class="apply-btn">Snap</button>
+      </div>
+
+      <div class="info" id="termInfo">අදාල කාල පරාසය: <strong id="termText">12 මාස</strong></div>
+
+      <div style="margin-top:12px">
+        <div class="small" id="enterCodeLabel">Promo / Referral Code (optional)</div>
+        <div class="inline-row" style="margin-top:6px">
+          <input id="codeInput" type="text" placeholder="Enter code (optional)" style="flex:1;padding:10px;border-radius:8px;border:1px solid #e6eef8">
+          <button id="applyBtn" class="apply-btn">Apply</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="summary">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="small" id="summaryTitle">Loan Summary</div>
+            <div class="small" id="summarySubtitle">Interest rate: 8% p.a.</div>
+          </div>
+          <div style="text-align:right">
+            <div class="small">Selected</div>
+            <div id="summaryAmount" style="font-weight:700">රු.50,000</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px" id="calcPreview">
+          <div class="small" id="estLabel">Estimated monthly</div>
+          <div style="font-size:22px;font-weight:700" id="monthlyPreview">රු.4,400</div>
+          <div class="small" id="totalPreview">Total to pay: රු.52,800</div>
+        </div>
+
+        <div style="margin-top:14px" class="small">
+          <strong>Note:</strong> මේක estimator එකක්.
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-/* ========== Settings & Texts ========== */
-const ANNUAL_RATE = 8.0; // percent p.a.
+/* Settings */
+const MAJOR_POINTS = [5000, 6000, 50000, 60000, 150000, 300000, 600000];
+const MIN = 5000, MAX = 600000;
+const STEP = 1000;
+const ANNUAL_RATE = 8.0;
 
-/* localization */
+let currentLang = 'si';
+
+/* Elements */
+const amountRange = document.getElementById('amountRange');
+const amountDisplay = document.getElementById('amountDisplay');
+const amountNumber = document.getElementById('amountNumber');
+const termText = document.getElementById('termText');
+const summaryAmount = document.getElementById('summaryAmount');
+const monthlyPreview = document.getElementById('monthlyPreview');
+const totalPreview = document.getElementById('totalPreview');
+const ticksContainer = document.getElementById('ticksContainer');
+const codeInput = document.getElementById('codeInput');
+
+/* Localization small set */
 const TEXTS = {
-  si: {
-    brandSubtitle: "ඉක්මන් සහ සරල ණය",
-    lead: "ඔබට අවශ්‍ය මුදල තෝරන්න",
-    minmax: "රු.5,000 — රු.600,000",
-    termInfo: "අදාල කාල පරාසය:",
-    enterCodeLabel: "Promo / Referral Code (optional)",
-    applyBtn: "Apply",
-    noteText: "Apply බොත්තම ඔබන්න — දෙවැනි පිටුවේ ගෙවීමේ විස්තර දර්ශනය වේ.",
-    summaryTitle: "Loan Summary",
-    summarySubtitle: "Interest rate: 8% p.a.",
-    estLabel: "Estimated monthly",
-    backText: "පසුට",
-    applyTitle: "Apply — ගෙවීම් විස්තර",
-    applySubtitle: "පොලී අනුපාතය: 8% p.a.",
-    confirmBtn: "තහවුරු කරන්න",
-    selected: "තෝරාගත්",
-    termMonths: (n)=> ${n} මාස,
-    totalToPay: (v)=> මුළු ගෙවිය යුතු මුදල: ${formatRupee(v)}
-  },
-  en: {
-    brandSubtitle: "Fast & simple loans",
-    lead: "Choose the amount you need",
-    minmax: "LKR 5,000 — LKR 600,000",
-    termInfo: "Term:",
-    enterCodeLabel: "Promo / Referral Code (optional)",
-    applyBtn: "Apply",
-    noteText: "Click Apply — you'll see payment details on next page.",
-    summaryTitle: "Loan Summary",
-    summarySubtitle: "Interest rate: 8% p.a.",
-    estLabel: "Estimated monthly",
-    backText: "Back",
-    applyTitle: "Apply — Payment Details",
-    applySubtitle: "Interest rate: 8% p.a.",
-    confirmBtn: "Confirm & Proceed",
-    selected: "Selected",
-    termMonths: (n)=> ${n} months,
-    totalToPay: (v)=> Total to pay: ${formatRupee(v)}
-  }
+  si:{ lead:"ඔබට අවශ්‍ය මුදල තෝරන්න", minmax:"රු.5,000 — රු.600,000", termMonths:(n)=> ${n} මාස, est:"Estimated monthly", totalToPay:(v)=> මුළු ගෙවිය යුතු මුදල: ${v}, note:"මේක estimator එකක්." },
+  en:{ lead:"Choose the amount you need", minmax:"LKR 5,000 — LKR 600,000", termMonths:(n)=> ${n} months, est:"Estimated monthly", totalToPay:(v)=> Total to pay: ${v}, note:"This is an estimator." }
 };
 
-/* ========== Helpers ========== */
+/* Helpers */
 function formatRupee(v){
-  // format integer/float as "රු.X,XXX" when lang=si, or "LKR X,XXX" for en
   const n = Math.round(v);
   const s = n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  return (currentLang === 'si') ? රු.${s} : LKR ${s};
+  return (currentLang==='si')? රු.${s} : LKR ${s};
 }
-
-/* determine term (months) according to mapping described earlier */
 function determineTerm(amount){
-  // Use mapping from user's specification (best-effort):
-  // - amount == 5000 => 12 months
-  // - amount == 50000 => 5 months
-  // - 6000 <= amount <= 50000 => 12 months
-  // - 60000 <= amount <= 150000 => 12 months
-  // - 150001 <= amount <= 300000 => 24 months
-  // - 300001 <= amount <= 600000 => 30 months
-  // default 12
   const a = Number(amount);
   if(a === 5000) return 12;
   if(a === 50000) return 5;
@@ -263,135 +166,125 @@ function determineTerm(amount){
   if(a > 300000 && a <= 600000) return 30;
   return 12;
 }
-
-/* amortized monthly payment */
-function monthlyPayment(principal, annualRatePercent, months){
-  const P = Number(principal);
-  const r = (annualRatePercent/100)/12; // monthly rate
-  const n = Number(months);
-  if(r === 0) return P / n;
-  const numerator = P * r * Math.pow(1 + r, n);
-  const denom = Math.pow(1 + r, n) - 1;
-  return numerator / denom;
+function monthlyPayment(P, annualRatePercent, months){
+  const r = (annualRatePercent/100)/12;
+  const n = months;
+  if(r === 0) return P/n;
+  return (P * r * Math.pow(1+r,n)) / (Math.pow(1+r,n)-1);
 }
 
-/* ========== UI wiring ========== */
-let currentLang = 'si'; // default Sinhala
+/* Render ticks */
+function renderTicks(){
+  ticksContainer.querySelectorAll('.tick').forEach(t=>t.remove());
+  const barRect = ticksContainer.getBoundingClientRect();
+  MAJOR_POINTS.forEach(pt => {
+    const percent = (pt - MIN) / (MAX - MIN) * 100;
+    const tick = document.createElement('div');
+    tick.className = 'tick';
+    tick.style.left = percent + '%';
+    ticksContainer.appendChild(tick);
 
-const el = id => document.getElementById(id);
-const amountRange = el('amountRange');
-const amountDisplay = el('amountDisplay');
-const termText = el('termText');
-const summaryAmount = el('summaryAmount');
-const monthlyPreview = el('monthlyPreview');
-const totalPreview = el('totalPreview');
-const codeInput = el('codeInput');
-const goApply = el('goApply');
+    const label = document.createElement('div');
+    label.className = 'tick-label';
+    label.style.left = percent + '%';
+    label.textContent = formatRupee(pt).replace(/^රු\./,'රු.'); // keep rupee format
+    ticksContainer.appendChild(label);
+  });
+}
 
-const btnSi = el('btn-si');
-const btnEn = el('btn-en');
-
-const pageMain = el('page-main');
-const pageApply = el('page-apply');
-const backBtn = el('backBtn');
-const applyAmount = el('applyAmount');
-const applyTerm = el('applyTerm');
-const applyMonthly = el('applyMonthly');
-const applyTotal = el('applyTotal');
-const applyCode = el('applyCode');
-const applyTitle = el('applyTitle');
-const applySubtitle = el('applySubtitle');
-const yearEl = el('year');
-
-/* initialize */
-yearEl.textContent = new Date().getFullYear();
-
+/* update all previews */
 function refreshAll(){
-  const amt = Number(amountRange.value);
-  // update displays
+  let amt = Number(amountRange.value);
+  // clamp
+  if(amt < MIN) amt = MIN;
+  if(amt > MAX) amt = MAX;
+  // ensure snapping to STEP
+  amt = Math.round(amt / STEP) * STEP;
+
+  amountRange.value = amt;
+  amountNumber.value = amt;
   amountDisplay.textContent = formatRupee(amt);
   summaryAmount.textContent = formatRupee(amt);
 
   const term = determineTerm(amt);
   termText.textContent = TEXTS[currentLang].termMonths(term);
 
-  // calc
   const monthly = monthlyPayment(amt, ANNUAL_RATE, term);
   const total = monthly * term;
 
   monthlyPreview.textContent = formatRupee(monthly);
-  totalPreview.textContent = TEXTS[currentLang].totalToPay(total);
-
-  // Apply page preview
-  applyAmount.textContent = formatRupee(amt);
-  applyTerm.textContent = TEXTS[currentLang].termMonths(term);
-  applyMonthly.textContent = formatRupee(monthly);
-  applyTotal.textContent = formatRupee(total);
-  applyCode.textContent = codeInput.value ? codeInput.value : '—';
-
-  // localization of a few strings
-  el('brandSubtitle').textContent = TEXTS[currentLang].brandSubtitle;
-  el('lead').textContent = TEXTS[currentLang].lead;
-  el('minmax').textContent = TEXTS[currentLang].minmax;
-  el('enterCodeLabel').textContent = TEXTS[currentLang].enterCodeLabel;
-  el('noteText').textContent = TEXTS[currentLang].noteText;
-  el('summaryTitle').textContent = TEXTS[currentLang].summaryTitle;
-  el('summarySubtitle').textContent = TEXTS[currentLang].summarySubtitle;
-  el('estLabel').textContent = TEXTS[currentLang].estLabel;
-  el('backText').textContent = TEXTS[currentLang].backText;
-  applyTitle.textContent = TEXTS[currentLang].applyTitle;
-  applySubtitle.textContent = TEXTS[currentLang].applySubtitle;
-  el('confirmBtn')?.setAttribute('title', TEXTS[currentLang].confirmBtn);
+  totalPreview.textContent = TEXTS[currentLang].totalToPay(formatRupee(total));
 }
 
-/* events */
-amountRange.addEventListener('input', ()=>{
+/* Snap-to-nearest-major (optional) */
+function snapToNearestMajor(){
+  const val = Number(amountRange.value);
+  // find nearest major point
+  let nearest = MAJOR_POINTS.reduce((a,b) => Math.abs(b-val) < Math.abs(a-val) ? b : a, MAJOR_POINTS[0]);
+  // ensure within bounds & step
+  nearest = Math.max(MIN, Math.min(MAX, Math.round(nearest/STEP)*STEP));
+  amountRange.value = nearest;
+  refreshAll();
+}
+
+/* Events */
+amountRange.addEventListener('input', ()=> refreshAll());
+amountNumber.addEventListener('change', ()=>{
+  let v = Number(amountNumber.value);
+  if(isNaN(v)) v = MIN;
+  if(v < MIN) v = MIN;
+  if(v > MAX) v = MAX;
+  // round to nearest step
+  v = Math.round(v/STEP) * STEP;
+  amountRange.value = v;
   refreshAll();
 });
+document.getElementById('snapBtn').addEventListener('click', snapToNearestMajor);
 
-goApply.addEventListener('click', ()=>{
-  // show apply page (single-file navigation)
-  pageMain.classList.remove('active'); pageMain.setAttribute('aria-hidden','true');
-  pageApply.classList.add('active'); pageApply.setAttribute('aria-hidden','false');
-  // ensure latest values
-  refreshAll();
-});
-
-backBtn.addEventListener('click', ()=>{
-  pageApply.classList.remove('active'); pageApply.setAttribute('aria-hidden','true');
-  pageMain.classList.add('active'); pageMain.setAttribute('aria-hidden','false');
-});
-
-btnSi.addEventListener('click', ()=>{
-  currentLang = 'si';
-  btnSi.classList.add('active'); btnEn.classList.remove('active');
-  refreshAll();
-});
-btnEn.addEventListener('click', ()=>{
-  currentLang = 'en';
-  btnEn.classList.add('active'); btnSi.classList.remove('active');
-  refreshAll();
-});
-
-/* Confirm button (placeholder) */
-el('confirmBtn').addEventListener('click', ()=>{
-  // For demo: just alert summary (could be replaced with actual submission)
+/* Apply / go to apply page (keeps simple alert) */
+document.getElementById('applyBtn').addEventListener('click', ()=>{
   const amt = Number(amountRange.value);
   const term = determineTerm(amt);
   const monthly = monthlyPayment(amt, ANNUAL_RATE, term);
   const total = monthly * term;
-  alert((currentLang==='si'?
-    ඔබ තෝරා ඇති මුදල: ${formatRupee(amt)}\nවිකල්පය: ${TEXTS[currentLang].termMonths(term)}\nමාසික වාරිකය: ${formatRupee(monthly)}\nමුළු ගෙවිය යුතු මුදල: ${formatRupee(total)}\n\nඔබගේ apply ඉදිරිපත් කිරීම සඳහා අපව දැන් අමතන්න. :
-    Selected amount: ${formatRupee(amt)}\nTerm: ${TEXTS[currentLang].termMonths(term)}\nMonthly: ${formatRupee(monthly)}\nTotal to pay: ${formatRupee(total)}\n\nTo proceed, please contact us.));
+  if(currentLang==='si'){
+    alert(ඔබ තෝරා ඇත: ${formatRupee(amt)}\nවිකල්පය: ${TEXTS.si.termMonths(term)}\nමාසික වාරිකය: ${formatRupee(monthly)}\nමුළු ගෙවිය යුතු මුදල: ${formatRupee(total)}\n\nCode: ${codeInput.value || '—'});
+  } else {
+    alert(Selected: ${formatRupee(amt)}\nTerm: ${TEXTS.en.termMonths(term)}\nMonthly: ${formatRupee(monthly)}\nTotal to pay: ${formatRupee(total)}\n\nCode: ${codeInput.value || '—'});
+  }
 });
 
-/* code input update apply page live */
-codeInput.addEventListener('input', ()=>{
-  applyCode.textContent = codeInput.value ? codeInput.value : '—';
+/* language toggle */
+document.getElementById('btn-si').addEventListener('click', ()=>{
+  currentLang = 'si';
+  document.getElementById('btn-si').style.backgroundColor = 'var(--accent)';
+  document.getElementById('btn-si').style.color = '#fff';
+  document.getElementById('btn-en').style.backgroundColor = '#fff';
+  document.getElementById('btn-en').style.color = '#000';
+  document.getElementById('lead').textContent = TEXTS.si.lead;
+  document.getElementById('minmax').textContent = TEXTS.si.minmax;
+  document.getElementById('summarySubtitle').textContent = 'Interest rate: 8% p.a.';
+  refreshAll();
+});
+document.getElementById('btn-en').addEventListener('click', ()=>{
+  currentLang = 'en';
+  document.getElementById('btn-en').style.backgroundColor = 'var(--accent)';
+  document.getElementById('btn-en').style.color = '#fff';
+  document.getElementById('btn-si').style.backgroundColor = '#fff';
+  document.getElementById('btn-si').style.color = '#000';
+  document.getElementById('lead').textContent = TEXTS.en.lead;
+  document.getElementById('minmax').textContent = TEXTS.en.minmax;
+  document.getElementById('summarySubtitle').textContent = 'Interest rate: 8% p.a.';
+  refreshAll();
 });
 
-/* initial render */
-refreshAll();
+/* initial */
+window.addEventListener('load', ()=>{
+  renderTicks();
+  refreshAll();
+  // re-render ticks on resize so labels align
+  window.addEventListener('resize', renderTicks);
+});
 </script>
 </body>
 </html>
