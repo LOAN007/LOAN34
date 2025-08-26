@@ -20,10 +20,10 @@
     .grid{display:grid;grid-template-columns:1fr;gap:14px}
     .section{background:var(--glass);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
     .slider-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-    .amount-display{font-size:22px;font-weight:800;min-width:160px}
-    input[type="range"]{width:100%}
+    .amount-display{font-size:26px;font-weight:800;min-width:160px} /* bigger */
+    input[type="range"]{width:100%; height:16px;} /* bigger slider */
     .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
-    .apply-btn{background:linear-gradient(90deg,var(--accent),#6ee7b7);color:#042033;padding:12px 16px;border-radius:10px;border:none;cursor:pointer;font-weight:800}
+    .apply-btn{background:linear-gradient(90deg,var(--accent),#6ee7b7);color:#042033;padding:12px 16px;border-radius:10px;border:none;cursor:pointer;font-weight:800;text-decoration:none;display:inline-block;text-align:center;}
     .secondary{background:transparent;border:1px solid rgba(255,255,255,0.05);color:var(--muted);padding:10px 14px;border-radius:10px;cursor:pointer}
     label.small{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
     input[type="text"]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
@@ -33,7 +33,7 @@
     footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px;flex-wrap:wrap}
     .note{font-size:12px;color:var(--muted)}
     @media(min-width:860px){ .grid{grid-template-columns:1fr 380px} .logo{width:68px;height:68px} }
-    @media(max-width:420px){ .card{padding:14px} .amount-display{font-size:20px} .apply-btn{width:100%} }
+    @media(max-width:420px){ .card{padding:14px} .amount-display{font-size:22px} .apply-btn{width:100%} }
     .back-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:6px}
     /* language modal */
     .lang-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:9999}
@@ -45,6 +45,7 @@
   </style>
 </head>
 <body>
+  <!-- Language modal -->
   <div class="lang-modal" id="langModal" aria-hidden="false">
     <div class="lang-box" role="dialog" aria-modal="true">
       <h2 id="langTitle">Select language / භාෂාව තෝරන්න</h2>
@@ -83,13 +84,8 @@
             </div>
           </div>
 
-          <div style="margin-top:12px">
-            <label class="small" id="lblPromo">Promo / Code (optional)</label>
-            <input id="promoInput" type="text" placeholder="Promo code (optional)" />
-          </div>
-
           <div class="controls" style="margin-top:12px">
-            <button class="apply-btn" id="applyBtn">Apply</button>
+            <a class="apply-btn" id="applyBtn" href="#">Apply</a>
             <button class="secondary" id="calcPreviewBtn">Quick Preview</button>
             <div style="margin-left:auto" class="note" id="rateNote">Interest: <strong>8% p.a.</strong></div>
           </div>
@@ -119,16 +115,11 @@
             <div class="result-row"><div class="muted" id="lblInstallment">Monthly / Installment</div><div class="big" id="installmentVal">රු. 0.00</div></div>
           </div>
 
-          <div style="margin-top:12px">
-            <label class="small" id="lblApplied">Applied code:</label>
-            <div style="padding:10px;border-radius:8px;background:rgba(255,255,255,0.01)"><span id="appliedCode">—</span></div>
-          </div>
-
           <footer>
             <div class="note" id="calcNote">Interest (Annual): <strong>8%</strong> — EMI calculated using amortization for monthly terms; 12-day case uses simple interest.</div>
             <div style="display:flex;gap:8px">
               <button class="secondary" id="editBtn">Edit Amount</button>
-              <button class="apply-btn" id="confirmBtn">Confirm & Proceed</button>
+              <a class="apply-btn" id="confirmBtn" href="YOUR_LINK_HERE">Confirm & Proceed</a>
             </div>
           </footer>
         </div>
@@ -137,13 +128,11 @@
   </div>
 
 <script>
-  // ---------- language strings ----------
   const STR = {
     en: {
       title: "AnyCash.lk — Quick Loan",
       subtitle: "View payment plan — Interest 8% p.a.",
       selectedAmount: "Selected Amount",
-      promo: "Promo / Code (optional)",
       rateNote: "Interest: 8% p.a.",
       notes: "Notes: 5000 → 12 days. 6000–40000 → 5 months. 50000 → 5 months. 60000–150000 → 12 months. 150001–300000 → 24 months. 300001–600000 → 30 months.",
       apply: "Apply",
@@ -155,7 +144,6 @@
       totalPayable: "Total payable",
       termMonths: "Term (months)",
       monthlyInstallment: "Monthly / Installment",
-      appliedCode: "Applied code:",
       calcNote: "Interest (Annual): 8% — EMI calculated using amortization for monthly terms; 12-day case uses simple interest.",
       edit: "Edit Amount",
       confirm: "Confirm & Proceed",
@@ -168,19 +156,17 @@
       title: "AnyCash.lk — ණය ගණකය",
       subtitle: "ගෙවීම් සැලැස්ම බලන්න — පොලී 8% වාර්ෂික",
       selectedAmount: "තෝරාගත් මුදල",
-      promo: "ප්‍රොමෝ / කේතය (විකල්ප)",
       rateNote: "පොලී: 8% වාර්ෂික",
       notes: "සටහන්: 5000 → 12 දින. 6000–40000 → 5 මාස. 50000 → 5 මාස. 60000–150000 → 12 මාස. 150001–300000 → 24 මාස. 300001–600000 → 30 මාස.",
       apply: "අයදුම් කරන්න",
       quickPreview: "කෙටි පෙරදසුන",
       paymentSummary: "ගෙවීම් සාරාංශය",
       youSelected: "ඔබ තෝරලා තියෙන්නේ —",
-      principal: "මූලරහිතය",
+      principal: "මූලය",
       interest: "පොලී (එකතුව 8% වාර්ෂික)",
       totalPayable: "ගෙවිය යුතු මුළු මුදල",
       termMonths: " කාලය (මාස)",
       monthlyInstallment: "මාසික / වාරිකය",
-      appliedCode: "විදින කේතය:",
       calcNote: "පොලී (වාර්ෂික): 8% — මාසික කාලයන් සඳහා EMI amortization ක්‍රමය භාවිතා කරනවා; 12-දින සඳහා simple interest.",
       edit: "මුදල වෙනස් කරන්න",
       confirm: "තහවුරු කිරීම & ඉදිරියට",
@@ -200,7 +186,6 @@
   const titleEl = document.getElementById('title');
   const subtitleEl = document.getElementById('subtitle');
   const lblAmount = document.getElementById('lblAmount');
-  const lblPromo = document.getElementById('lblPromo');
   const rateNote = document.getElementById('rateNote');
   const notesBlock = document.getElementById('notesBlock');
   const applyBtn = document.getElementById('applyBtn');
@@ -216,8 +201,6 @@
   const termVal = document.getElementById('termVal');
   const termLabel = document.getElementById('termLabel');
   const installmentVal = document.getElementById('installmentVal');
-  const promoInput = document.getElementById('promoInput');
-  const appliedCode = document.getElementById('appliedCode');
   const backBtn = document.getElementById('backBtn');
   const editBtn = document.getElementById('editBtn');
   const confirmBtn = document.getElementById('confirmBtn');
@@ -227,20 +210,16 @@
   const lblInterest = document.getElementById('lblInterest');
   const lblTotal = document.getElementById('lblTotal');
   const lblInstallment = document.getElementById('lblInstallment');
-  const lblApplied = document.getElementById('lblApplied');
   const calcNote = document.getElementById('calcNote');
   const minLabel = document.getElementById('minLabel');
   const maxLabel = document.getElementById('maxLabel');
 
-  // ---------- state ----------
-  let LANG = 'si'; // default after choose
+  let LANG = 'si'; // default
   const annualRate = 0.08;
 
-  // ---------- helper formatters ----------
   function fmt(n){ return 'රු. ' + Number(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
   function fmtInt(n){ return 'රු. ' + Number(n).toLocaleString('en-US', {minimumFractionDigits:0}); }
 
-  // ---------- term detection (with your mapping) ----------
   function detectTermAndType(amount){
     const a = Number(amount);
     if (a === 5000) return {type:'days', term:12};
@@ -249,7 +228,6 @@
     if (a >= 60000 && a <= 150000) return {type:'months', term:12};
     if (a > 150000 && a <= 300000) return {type:'months', term:24};
     if (a > 300000 && a <= 600000) return {type:'months', term:30};
-    // fallback
     if (a < 6000) return {type:'months', term:1};
     if (a < 50000) return {type:'months', term:5};
     if (a <= 150000) return {type:'months', term:12};
@@ -257,9 +235,7 @@
     return {type:'months', term:30};
   }
 
-  // ---------- calculations ----------
-  // EMI formula for months (reducing balance): EMI = P * r*(1+r)^n / ((1+r)^n -1)
-  function calculate(amount, promoCode){
+  function calculate(amount){
     const principal = Number(amount);
     const termInfo = detectTermAndType(principal);
     let interestTotal = 0;
@@ -270,136 +246,13 @@
       const days = termInfo.term;
       interestTotal = principal * annualRate * (days / 365);
       totalPayable = principal + interestTotal;
-      installment = totalPayable; // single payment after days
+      installment = totalPayable;
     } else {
-      const n = termInfo.term; // months
-      const monthlyRate = annualRate / 12; // e.g. 0.08/12
-      // EMI formula:
+      const n = termInfo.term;
+      const monthlyRate = annualRate / 12;
       if (monthlyRate === 0) {
         installment = principal / n;
         interestTotal = 0;
         totalPayable = principal;
       } else {
-        const r = monthlyRate;
-        const factor = Math.pow(1 + r, n);
-        installment = principal * r * factor / (factor - 1);
-        totalPayable = installment * n;
-        interestTotal = totalPayable - principal;
-      }
-    }
-
-    // round values
-    interestTotal = Number(interestTotal.toFixed(2));
-    totalPayable = Number(totalPayable.toFixed(2));
-    installment = Number(installment.toFixed(2));
-
-    return { principal, interestTotal, totalPayable, installment, termInfo };
-  }
-
-  // ---------- UI update ----------
-  function updateAmountDisplay(v){
-    amountDisplay.textContent = fmtInt(v);
-  }
-
-  function showResultsForCurrentSelection(){
-    const amount = Number(amountRange.value);
-    const promo = promoInput.value.trim() || '—';
-    const res = calculate(amount, promo);
-    summaryAmountText.textContent = fmtInt(res.principal);
-    principalVal.textContent = fmtInt(res.principal);
-    interestVal.textContent = fmt(res.interestTotal);
-    totalVal.textContent = fmt(res.totalPayable);
-    appliedCode.textContent = promo;
-    if (res.termInfo.type === 'days'){
-      termLabel.textContent = (LANG === 'si') ? 'කාලය (දින)' : 'Term (days)';
-      termVal.textContent = res.termInfo.term + ((LANG==='si') ? ' දින' : ' days');
-      installmentVal.textContent = fmt(res.installment) + ((LANG==='si') ? ' (තනි පිරිවිතරය)' : ' (single payment)');
-    } else {
-      termLabel.textContent = (LANG === 'si') ? 'කාලය (මාස)' : 'Term (months)';
-      termVal.textContent = res.termInfo.term + ((LANG==='si') ? ' මාස' : ' months');
-      installmentVal.textContent = fmt(res.installment) + ((LANG==='si') ? ' / මාසය' : ' / month');
-    }
-  }
-
-  // ---------- language handling ----------
-  function applyLanguage(lang){
-    LANG = lang;
-    const s = STR[lang];
-    titleEl.textContent = s.title;
-    subtitleEl.textContent = s.subtitle;
-    lblAmount.textContent = s.selectedAmount;
-    lblPromo.textContent = s.promo;
-    rateNote.textContent = s.rateNote;
-    notesBlock.textContent = s.notes;
-    applyBtn.textContent = s.apply;
-    calcPreviewBtn.textContent = s.quickPreview;
-    resultTitle.textContent = s.paymentSummary;
-    youChose.childNodes[0] && youChose.childNodes[0].remove?.(); // cleanup
-    youChose.innerHTML = s.youSelected + ' <span id="summaryAmountText">' + summaryAmountText.textContent + '</span>';
-    lblPrincipal.textContent = s.principal;
-    lblInterest.textContent = s.interest;
-    lblTotal.textContent = s.totalPayable;
-    lblInstallment.textContent = s.monthlyInstallment;
-    lblApplied.textContent = s.appliedCode;
-    calcNote.textContent = s.calcNote;
-    editBtn.textContent = s.edit;
-    confirmBtn.textContent = s.confirm;
-    document.getElementById('langTitle').textContent = s.langTitle;
-    document.getElementById('langSubtitle').textContent = s.langSubtitle;
-    chooseSi.textContent = s.chooseSi;
-    chooseEn.textContent = s.chooseEn;
-    minLabel.textContent = (lang==='si') ? 'රු.5,000' : 'රු.5,000';
-    maxLabel.textContent = (lang==='si') ? 'රු.600,000' : 'රු.600,000';
-    // update displayed result if page2 visible
-    if (page2.style.display !== 'none') showResultsForCurrentSelection();
-  }
-
-  // ---------- event wiring ----------
-  amountRange.addEventListener('input', (e)=> updateAmountDisplay(e.target.value) );
-  amountRange.addEventListener('change', (e)=> updateAmountDisplay(e.target.value) );
-
-  applyBtn.addEventListener('click', ()=>{
-    showResultsForCurrentSelection();
-    page1.style.display = 'none';
-    page2.style.display = 'block';
-    document.getElementById('appCard').scrollIntoView({behavior:'smooth'});
-  });
-
-  calcPreviewBtn.addEventListener('click', ()=>{
-    showResultsForCurrentSelection();
-    alert( (LANG==='si') ? "පෙරදසුන යාවත්කාලීනයි. විස්තර සඳහා Apply ඔබන්න." : "Preview updated. Click Apply to go to the detailed page.");
-  });
-
-  backBtn.addEventListener('click', ()=> { page2.style.display='none'; page1.style.display='block'; } );
-  editBtn.addEventListener('click', ()=> { page2.style.display='none'; page1.style.display='block'; } );
-
-  confirmBtn.addEventListener('click', ()=>{
-    const promo = promoInput.value.trim() || '—';
-    const amount = Number(amountRange.value);
-    const res = calculate(amount, promo);
-    const summary = [
-      (LANG==='si' ? "මූලය: " : "Principal: ") + fmtInt(res.principal),
-      (LANG==='si' ? "පොලී එකතුව: " : "Interest total: ") + fmt(res.interestTotal),
-      (LANG==='si' ? "ගෙවියයුතු මුළු මුදල: " : "Total payable: ") + fmt(res.totalPayable),
-      (res.termInfo.type==='days') ? ((LANG==='si') ? "කාලය: " : "Term: ") + res.termInfo.term + ((LANG==='si') ? " දින" : " days") : ((LANG==='si') ? "කාලය: " : "Term: ") + res.termInfo.term + ((LANG==='si') ? " මාස" : " months"),
-      (res.termInfo.type==='days') ? ((LANG==='si') ? "ගෙවීම: " : "Payment: ") + fmt(res.installment) : ((LANG==='si') ? "මාසිකය: " : "Monthly: ") + fmt(res.installment),
-      (LANG==='si' ? "ප්‍රමෝ කේතය: " : "Promo code: ") + (promo || '—')
-    ].join("\n");
-    alert( (LANG==='si' ? "යෙදුම ඉදිරියට ගෙන යනවා:\n\n" : "Proceeding with application:\n\n") + summary + "\n\n(Development: replace with real submission.)");
-  });
-
-  // language modal handlers
-  chooseSi.addEventListener('click', ()=>{ applyLanguage('si'); langModal.style.display='none'; });
-  chooseEn.addEventListener('click', ()=>{ applyLanguage('en'); langModal.style.display='none'; });
-  switchLang.addEventListener('click', ()=>{
-    applyLanguage(LANG === 'si' ? 'en' : 'si');
-  });
-
-  // initialize display
-  updateAmountDisplay(amountRange.value);
-
-  // Optional: if user never chooses language, default show modal; already visible by default.
-  // If you want to remember language across sessions, you can store in localStorage (not added here).
-</script>
-</body>
-</html>
+        const r =
