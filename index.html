@@ -6,11 +6,51 @@
 <title>AnyCash.lk Loan Calculator</title>
 <style>
     *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
-    body{background:#f5f5f5;display:flex;justify-content:center;align-items:center;min-height:100vh;}
+    body{background:#f5f5f5;display:flex;justify-content:center;align-items:center;min-height:100vh;flex-direction:column;padding-top:70px;}
     .container{background:#fff;padding:25px;border-radius:20px;box-shadow:0 4px 15px rgba(0,0,0,0.1);width:90%;max-width:400px;text-align:center;display:none;}
-    
+
+    /* Top Navigation Bar */
+    .top-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        z-index: 1000;
+    }
+    .logo {
+        font-size: 20px;
+        font-weight: bold;
+        color: #144d32;
+    }
+    .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .login-btn {
+        background: #e8f9e6;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #144d32;
+        font-weight: bold;
+    }
+    .lang-switch {
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
     h2{margin-bottom:20px;font-size:20px;color:#333;}
-    
     .amount-box{
         display:flex;align-items:center;justify-content:space-between;
         background:#f3f5f1;border-radius:15px;padding:15px 20px;margin-bottom:15px;
@@ -20,7 +60,6 @@
         width:40px;height:40px;border-radius:50%;cursor:pointer;
     }
     .amount-display{font-size:20px;font-weight:bold;color:#333;}
-    
     input[type=range]{
         width:100%;-webkit-appearance:none;height:6px;background:#144d32;border-radius:3px;
         outline:none;margin:10px 0;
@@ -29,10 +68,9 @@
         -webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;
         background:#144d32;cursor:pointer;
     }
-    
     .range-labels{display:flex;justify-content:space-between;font-size:14px;color:#777;}
-    
-    /* Apply button with logo */
+
+    /* Apply button */
     .apply-btn{
         display:flex;align-items:center;justify-content:center;
         width:100%;padding:15px;margin-top:20px;
@@ -44,11 +82,10 @@
     }
     .apply-btn span.text{margin-left:auto;}
     .apply-btn:hover{background:#b4eb1f;}
-    
     .details{margin-top:20px;text-align:left;background:#f9f9f9;
         padding:15px;border-radius:12px;font-size:14px;color:#333;}
     .details p{margin:8px 0;}
-    
+
     /* Language Modal */
     .modal{position:fixed;top:0;left:0;width:100%;height:100%;
         background:rgba(0,0,0,0.6);display:flex;justify-content:center;align-items:center;}
@@ -58,6 +95,18 @@
 </style>
 </head>
 <body>
+
+<!-- Top Navigation Bar -->
+<div class="top-bar">
+  <div class="logo">AnyCash.lk</div>
+  <div class="nav-actions">
+    <button class="login-btn">Log in</button>
+    <select class="lang-switch" onchange="setLanguage(this.value)">
+      <option value="en">EN</option>
+      <option value="si">සිං</option>
+    </select>
+  </div>
+</div>
 
 <!-- Language Selector Modal -->
 <div class="modal" id="langModal">
@@ -71,26 +120,21 @@
 <!-- Loan Calculator UI -->
 <div class="container" id="mainContainer">
     <h2 id="title">Fast online loan up to <span style="color:#5cb85c;">600 000 RS</span>!</h2>
-    
     <label id="loanLabel">Loan amount</label>
     <div class="amount-box">
         <button id="decrease">−</button>
         <span class="amount-display" id="amountDisplay">5 000 RS</span>
         <button id="increase">+</button>
     </div>
-    
     <input type="range" id="loanAmount" min="5000" max="600000" step="1000" value="5000">
     <div class="range-labels">
         <span>5 000 RS</span>
         <span>600 000 RS</span>
     </div>
-    
-    <!-- Loan button with brand -->
     <button class="apply-btn" id="applyBtn">
         <span class="brand">AnyCash.lk</span>
         <span class="text">Take a loan</span>
     </button>
-    
     <div class="details" id="loanDetails">
         <p><strong id="monthlyLabel">Monthly Installment:</strong> <span id="monthly">-</span> RS</p>
         <p><strong id="totalLabel">Total Payable:</strong> <span id="total">-</span> RS</p>
@@ -172,7 +216,6 @@ function calculateLoan(){
     monthsEl.textContent = months + " " + translations[currentLang].monthsText;
 }
 
-// Slider update
 loanAmountSlider.addEventListener('input', calculateLoan);
 increaseBtn.addEventListener('click', ()=>{let val=parseInt(loanAmountSlider.value);if(val<600000){val+=1000;}loanAmountSlider.value=val;calculateLoan();});
 decreaseBtn.addEventListener('click', ()=>{let val=parseInt(loanAmountSlider.value);if(val>5000){val-=1000;}loanAmountSlider.value=val;calculateLoan();});
