@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="si">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AnyCash.lk — Quick Loan Calculator</title>
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --accent:#1fb6ff;
+      --muted:#a6b0c2;
+      --glass: rgba(255,255,255,0.02);
+      --radius:14px;
+    }
+    *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial;}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071226 0%, #071a2a 100%); color:#e6eef8;}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+    .card{
+      width:100%;
+      max-width:920px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      padding:22px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.7);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    /* layout for mobile-first */
+    header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .logo{
+      width:56px;height:56px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#6ee7b7);
+      display:flex;align-items:center;justify-content:center;font-weight:700;color:#042033;font-size:18px;
+      box-shadow: 0 6px 18px rgba(31,182,255,0.12), inset 0 -2px 6px rgba(0,0,0,0.2);
+    }
+    h1{font-size:18px;margin:0}
+    p.lead{margin:0;color:var(--muted);font-size:13px}
+
+    .grid{display:grid;grid-template-columns:1fr;gap:16px}
+    .section{background:var(--glass);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
+    .slider-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .amount-display{font-size:22px;font-weight:700;color:#ffffff;min-width:160px;text-align:left}
+    .range-wrap{flex:1;min-width:180px}
+    input[type="range"]{width:100%}
+    .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
+    .apply-btn{
+      background:linear-gradient(90deg,var(--accent),#6ee7b7);
+      color:#042033;padding:12px 18px;border-radius:10px;border:none;font-weight:700;cursor:pointer;
+      box-shadow: 0 8px 20px rgba(31,182,255,0.12);
+    }
+    .secondary{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:10px 14px;border-radius:10px}
+    label.small{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+
+    input[type="text"], input[type="number"]{
+      width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;
+    }
+
+    /* result page */
+    .result-title{font-size:16px;margin:0 0 6px 0}
+    .result-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));margin-bottom:8px}
+    .muted{color:var(--muted);font-size:13px}
+    .big{font-size:20px;font-weight:700}
+
+    footer{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px;flex-wrap:wrap}
+    .note{font-size:12px;color:var(--muted)}
+
+    /* responsive: for wider screens, two-column */
+    @media(min-width:860px){
+      .grid{grid-template-columns: 1fr 380px;}
+      .logo{width:68px;height:68px;font-size:20px}
+    }
+
+    /* make it feel full-screen on mobile */
+    @media(max-width:420px){
+      .card{padding:16px;border-radius:10px}
+      .amount-display{font-size:20px;min-width:140px}
+      .apply-btn{width:100%}
+    }
+
+    .back-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:6px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="app">
+      <header>
+        <div class="logo">AC</div>
+        <div>
+          <h1>AnyCash.lk — Quick Loan</h1>
+          <p class="lead">ගෙවීම් සැලැස්ම බලන්න — පොලී 8% (annual)</p>
+        </div>
+      </header>
+
+      <div class="grid">
+        <!-- Page 1: selector -->
+        <div class="section" id="page1">
+          <label class="small">තෝරාගත් මුදල</label>
+          <div class="slider-row">
+            <div class="amount-display" id="amountDisplay">රු. 50,000</div>
+            <div class="range-wrap">
+              <input type="range" id="amountRange" min="5000" max="600000" step="1000" value="50000" />
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:6px">
+                <span>රු.5,000</span><span>රු.600,000</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label class="small">Promo / Code (optional)</label>
+            <input id="promoInput" type="text" placeholder="Promo code (optional) — ලබාදීම සඳහා ඉඩ..." />
+          </div>
+
+          <div class="controls" style="margin-top:14px">
+            <button class="apply-btn" id="applyBtn">Apply</button>
+            <button class="secondary" id="calcPreviewBtn">Quick Preview</button>
+            <div style="margin-left:auto" class="note">පොලී අනුපාතය: <strong>8% p.a.</strong></div>
+          </div>
+
+          <div style="margin-top:12px;color:var(--muted);font-size:13px">
+            <strong>Notes:</strong> 5000 සඳහා කාලසීමාව 12 දිනයි. අනෙක් මුදල් ශ්‍රේණි අනුව මාස ගණන සකසා ඇත.
+          </div>
+        </div>
+
+        <!-- Page 2: results -->
+        <div class="section" id="page2" style="display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div>
+              <h3 class="result-title">Payment summary</h3>
+              <div class="muted">ඔබ තෝරල තියෙන්නේ — <span id="summaryAmountText">රු. 50,000</span></div>
+            </div>
+            <div>
+              <button class="back-btn" id="backBtn">◀ Back</button>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="result-row">
+              <div class="muted">Principal</div>
+              <div class="big" id="principalVal">රු. 50,000</div>
+            </div>
+            <div class="result-row">
+              <div class="muted">Interest (total at 8% p.a.)</div>
+              <div class="big" id="interestVal">රු. 0.00</div>
+            </div>
+            <div class="result-row">
+              <div class="muted">Total payable</div>
+              <div class="big" id="totalVal">රු. 0.00</div>
+            </div>
+            <div class="result-row">
+              <div class="muted" id="termLabel">Term</div>
+              <div class="big" id="termVal">12 months</div>
+            </div>
+            <div class="result-row">
+              <div class="muted">Monthly / Installment</div>
+              <div class="big" id="installmentVal">රු. 0.00</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label class="small">Applied code:</label>
+            <div style="padding:10px;border-radius:8px;background:rgba(255,255,255,0.01)"><span id="appliedCode">—</span></div>
+          </div>
+
+          <footer>
+            <div class="note">පොලී අනුපාතය (Annual): <strong>8%</strong> — ගණනය simple interest proportionally (days/months).</div>
+            <div style="display:flex;gap:8px">
+              <button class="secondary" id="editBtn">Edit Amount</button>
+              <button class="apply-btn" id="confirmBtn">Confirm & Proceed</button>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Utilities
+  function fmt(n){
+    // format number as "රු. X,XXX.XX"
+    return 'රු. ' + Number(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+  function fmtInt(n){
+    return 'රු. ' + Number(n).toLocaleString('en-US', {minimumFractionDigits:0});
+  }
+
+  const amountRange = document.getElementById('amountRange');
+  const amountDisplay = document.getElementById('amountDisplay');
+  const applyBtn = document.getElementById('applyBtn');
+  const backBtn = document.getElementById('backBtn');
+  const page1 = document.getElementById('page1');
+  const page2 = document.getElementById('page2');
+  const summaryAmountText = document.getElementById('summaryAmountText');
+  const principalVal = document.getElementById('principalVal');
+  const interestVal = document.getElementById('interestVal');
+  const totalVal = document.getElementById('totalVal');
+  const installmentVal = document.getElementById('installmentVal');
+  const termVal = document.getElementById('termVal');
+  const termLabel = document.getElementById('termLabel');
+  const promoInput = document.getElementById('promoInput');
+  const appliedCode = document.getElementById('appliedCode');
+  const editBtn = document.getElementById('editBtn');
+  const confirmBtn = document.getElementById('confirmBtn');
+  const calcPreviewBtn = document.getElementById('calcPreviewBtn');
+
+  // default
+  function updateAmountDisplay(v){
+    // pretty format and rules for step display
+    amountDisplay.textContent = fmtInt(v);
+  }
+
+  function detectTermAndType(amount){
+    // returns object {type: 'days'|'months', term: number}
+    const a = Number(amount);
+    if (a === 5000) return {type:'days', term:12};
+    if (a === 40000) return {type:'months', term:4};
+    if (a === 50000) return {type:'months', term:5};
+    if (a >= 60000 && a <= 150000) return {type:'months', term:12};
+    if (a > 150000 && a <= 300000) return {type:'months', term:24};
+    if (a > 300000 && a <= 600000) return {type:'months', term:30};
+    // fallback: choose nearest bracket
+    if (a < 40000) return {type:'months', term:1}; // very small but should not happen except 5k handled
+    if (a < 60000) return {type:'months', term:4};
+    if (a <= 150000) return {type:'months', term:12};
+    if (a <= 300000) return {type:'months', term:24};
+    return {type:'months', term:30};
+  }
+
+  function calculate(amount, promoCode){
+    // interest rate annual = 8% (0.08)
+    const principal = Number(amount);
+    const annualRate = 0.08;
+    const termInfo = detectTermAndType(principal);
+    let interestTotal = 0;
+    let totalPayable = 0;
+    let installment = 0;
+    if (termInfo.type === 'days'){
+      const days = termInfo.term;
+      // interest proportionally by days / 365 (annual)
+      interestTotal = principal * annualRate * (days / 365);
+      totalPayable = principal + interestTotal;
+      installment = totalPayable; // single payment after 12 days
+    } else {
+      const months = termInfo.term;
+      // simple interest for months: principal * annualRate * (months/12)
+      interestTotal = principal * annualRate * (months / 12);
+      totalPayable = principal + interestTotal;
+      installment = totalPayable / months;
+    }
+
+    // rounding to 2 decimals
+    interestTotal = Number(interestTotal.toFixed(2));
+    totalPayable = Number(totalPayable.toFixed(2));
+    installment = Number(installment.toFixed(2));
+
+    return {
+      principal, interestTotal, totalPayable, installment,
+      termInfo
+    };
+  }
+
+  // initial update
+  updateAmountDisplay(amountRange.value);
+
+  amountRange.addEventListener('input', (e)=>{
+    // snap some common points visually: but range is continuous by step
+    updateAmountDisplay(e.target.value);
+  });
+
+  function showResultsForCurrentSelection(){
+    const amount = Number(amountRange.value);
+    const promo = promoInput.value.trim() || '—';
+    const res = calculate(amount, promo);
+    // populate UI
+    summaryAmountText.textContent = fmtInt(res.principal);
+    principalVal.textContent = fmtInt(res.principal);
+    interestVal.textContent = fmt(res.interestTotal);
+    totalVal.textContent = fmt(res.totalPayable);
+    appliedCode.textContent = promo;
+    if (res.termInfo.type === 'days'){
+      termLabel.textContent = "Term (days)";
+      termVal.textContent = res.termInfo.term + ' days';
+      installmentVal.textContent = fmt(res.installment) + ' (single payment)';
+    } else {
+      termLabel.textContent = "Term (months)";
+      termVal.textContent = res.termInfo.term + ' months';
+      installmentVal.textContent = fmt(res.installment) + ' / month';
+    }
+  }
+
+  applyBtn.addEventListener('click', ()=>{
+    showResultsForCurrentSelection();
+    // show page2
+    page1.style.display = 'none';
+    page2.style.display = 'block';
+    // scroll to top of card
+    document.getElementById('app').scrollIntoView({behavior:'smooth'});
+  });
+
+  calcPreviewBtn.addEventListener('click', ()=>{
+    showResultsForCurrentSelection();
+    // small toast-ish: just show an alert-like (simple)
+    alert('Preview updated. Click Apply to go to the detailed page.');
+  });
+
+  backBtn.addEventListener('click', ()=>{
+    page2.style.display = 'none';
+    page1.style.display = 'block';
+  });
+  editBtn.addEventListener('click', ()=>{
+    page2.style.display = 'none';
+    page1.style.display = 'block';
+  });
+
+  confirmBtn.addEventListener('click', ()=>{
+    // This is a placeholder — redirect to a real application flow or form submit.
+    const promo = promoInput.value.trim() || '—';
+    const amount = Number(amountRange.value);
+    const res = calculate(amount, promo);
+    // For demo we'll show a confirm dialog summarizing key numbers.
+    const summary = [
+      "Principal: " + fmtInt(res.principal),
+      "Interest total: " + fmt(res.interestTotal),
+      "Total payable: " + fmt(res.totalPayable),
+      (res.termInfo.type === 'days') ? ("Term: " + res.termInfo.term + " days") : ("Term: " + res.termInfo.term + " months"),
+      (res.termInfo.type === 'days') ? ("Payment: " + fmt(res.installment) + " (single)") : ("Monthly: " + fmt(res.installment) + " / month"),
+      "Promo code: " + (promo || '—')
+    ].join("\\n");
+    alert("Proceeding with application:\\n\\n" + summary + "\\n\\n(Replace this with real submission in production.)");
+  });
+
+  // ensure mobile full-screen feel: make slider responsive on touch
+  amountRange.addEventListener('change', ()=> updateAmountDisplay(amountRange.value));
+</script>
+</body>
+</html>
