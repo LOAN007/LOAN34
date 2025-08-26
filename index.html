@@ -32,11 +32,17 @@
     
     .range-labels{display:flex;justify-content:space-between;font-size:14px;color:#777;}
     
+    /* Apply button with logo */
     .apply-btn{
-        display:block;width:100%;padding:15px;margin-top:20px;
+        display:flex;align-items:center;justify-content:center;
+        width:100%;padding:15px;margin-top:20px;
         background:#c6f622;border:none;border-radius:12px;
         font-size:18px;font-weight:bold;color:#111;cursor:pointer;
     }
+    .apply-btn span.brand{
+        margin-right:auto;font-weight:bold;color:#144d32;font-size:16px;
+    }
+    .apply-btn span.text{margin-left:auto;}
     .apply-btn:hover{background:#b4eb1f;}
     
     .details{margin-top:20px;text-align:left;background:#f9f9f9;
@@ -79,7 +85,11 @@
         <span>600 000 RS</span>
     </div>
     
-    <button class="apply-btn" id="applyBtn">Take a loan</button>
+    <!-- Loan button with brand -->
+    <button class="apply-btn" id="applyBtn">
+        <span class="brand">AnyCash.lk</span>
+        <span class="text">Take a loan</span>
+    </button>
     
     <div class="details" id="loanDetails">
         <p><strong id="monthlyLabel">Monthly Installment:</strong> <span id="monthly">-</span> RS</p>
@@ -125,7 +135,7 @@ function setLanguage(lang){
     const t = translations[lang];
     document.getElementById('title').textContent = t.title;
     document.getElementById('loanLabel').textContent = t.loanLabel;
-    document.getElementById('applyBtn').textContent = t.applyBtn;
+    document.querySelector('.apply-btn .text').textContent = t.applyBtn;
     document.getElementById('monthlyLabel').textContent = t.monthlyLabel;
     document.getElementById('totalLabel').textContent = t.totalLabel;
     document.getElementById('rateLabel').textContent = t.rateLabel;
@@ -166,8 +176,6 @@ function calculateLoan(){
 loanAmountSlider.addEventListener('input', calculateLoan);
 increaseBtn.addEventListener('click', ()=>{let val=parseInt(loanAmountSlider.value);if(val<600000){val+=1000;}loanAmountSlider.value=val;calculateLoan();});
 decreaseBtn.addEventListener('click', ()=>{let val=parseInt(loanAmountSlider.value);if(val>5000){val-=1000;}loanAmountSlider.value=val;calculateLoan();});
-
-// Initial - only calculate after lang selected
 </script>
 </body>
 </html>
