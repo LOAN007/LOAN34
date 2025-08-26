@@ -1,290 +1,125 @@
-<!doctype html>
-<html lang="si">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>AnyCash.lk — Slider with ticks</title>
-<style>
-  :root{
-    --accent:#0b74de; --bg:#f7f9fb; --card:#fff; --text:#111;
-    --muted:#6b7280; --tick:#cbd5e1;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;font-family:Inter, Roboto, "Noto Sans Sinhala", Arial, sans-serif;
-    background:linear-gradient(180deg,#eef6ff 0%,var(--bg) 100%);color:var(--text);
-  }
-  .wrap{max-width:980px;margin:18px auto;padding:16px}
-  .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
-  .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-  .logo{width:50px;height:50px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
-  .main{display:flex;gap:18px}
-  .left{flex:1}
-  .right{width:320px}
-  h1{font-size:20px;margin:6px 0}
-  .small{font-size:13px;color:var(--muted)}
-  .amount-val{font-size:28px;font-weight:700;margin:8px 0}
-  input[type="range"]{width:100%;}
-  .apply-btn{display:inline-block;padding:10px 14px;border-radius:10px;background:var(--accent);color:#fff;border:none;cursor:pointer}
-  .inline-row{display:flex;gap:8px;align-items:center}
-  .inline-row input[type="number"]{width:140px;padding:8px;border-radius:8px;border:1px solid #e6eef8}
-  .ticks{position:relative;height:40px;margin-top:8px}
-  /* tick bar */
-  .ticks .bar{height:4px;background:#e6eef8;border-radius:6px;position:absolute;left:0;right:0;top:16px}
-  .tick{position:absolute;top:8px;width:2px;height:24px;background:var(--tick);transform:translateX(-1px)}
-  .tick-label{position:absolute;top:34px;font-size:12px;color:var(--muted);transform:translateX(-50%);white-space:nowrap}
-  /* style for slider thumb to be more visible */
-  input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none;height:18px;width:18px;border-radius:50%;background:var(--accent);box-shadow:0 2px 6px rgba(10,20,60,0.2);margin-top:-7px;
-  }
-  input[type=range]::-moz-range-thumb{height:18px;width:18px;border-radius:50%;background:var(--accent);border:none}
-  .info{background:#f8fafc;border-radius:10px;padding:12px;margin-top:12px;color:var(--muted)}
-  .summary{background:linear-gradient(180deg,#fff,#fbfdff);padding:14px;border-radius:10px}
-  .hidden{display:none}
-  @media (max-width:720px){
-    .main{flex-direction:column}
-    .right{width:100%}
-    .card{border-radius:0;min-height:100vh}
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnyCash.lk Loan Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f4f4f4;
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        input[type=range] {
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .details {
+            text-align: left;
+            margin-top: 20px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .details p {
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
-<div class="wrap card">
-  <div class="header">
-    <div style="display:flex;gap:12px;align-items:center">
-      <div class="logo">AC</div>
-      <div>
-        <div style="font-weight:700">AnyCash.lk</div>
-        <div class="small" id="brandSubtitle">ඉක්මන් සහ සරල ණය</div>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;align-items:center">
-      <button id="btn-si" style="padding:6px 8px;border-radius:6px;background:var(--accent);color:#fff;border:none">සිංහල</button>
-      <button id="btn-en" style="padding:6px 8px;border-radius:6px;border:1px solid #e6eef8;background:#fff">English</button>
-    </div>
-  </div>
+    <div class="container">
+        <h1>AnyCash.lk Loan Calculator</h1>
+        <label for="loanAmount">Loan Amount: <span id="amountDisplay">5000</span> LKR</label>
+        <input type="range" id="loanAmount" min="5000" max="600000" step="1000" value="5000">
 
-  <div class="main">
-    <div class="left">
-      <h1 id="lead">ඔබට අවශ්‍ය මුදල තෝරන්න</h1>
-      <div class="small" id="minmax">රු.5,000 — රු.600,000</div>
+        <button id="applyBtn">Apply</button>
 
-      <div class="amount-val" id="amountDisplay">රු.50,000</div>
-
-      <!-- Range input (continuous but step 1000) -->
-      <input id="amountRange" type="range" min="5000" max="600000" step="1000" value="50000">
-
-      <!-- ticks bar with major positions -->
-      <div class="ticks" id="ticksContainer">
-        <div class="bar"></div>
-        <!-- ticks will be injected by JS -->
-      </div>
-
-      <div style="margin-top:12px" class="inline-row">
-        <label class="small">අගය (Type):</label>
-        <input id="amountNumber" type="number" min="5000" max="600000" step="1000" value="50000">
-        <button id="snapBtn" class="apply-btn">Snap</button>
-      </div>
-
-      <div class="info" id="termInfo">අදාල කාල පරාසය: <strong id="termText">12 මාස</strong></div>
-
-      <div style="margin-top:12px">
-        <div class="small" id="enterCodeLabel">Promo / Referral Code (optional)</div>
-        <div class="inline-row" style="margin-top:6px">
-          <input id="codeInput" type="text" placeholder="Enter code (optional)" style="flex:1;padding:10px;border-radius:8px;border:1px solid #e6eef8">
-          <button id="applyBtn" class="apply-btn">Apply</button>
+        <div class="details" id="loanDetails">
+            <p><strong>Monthly Installment:</strong> <span id="monthly">-</span> LKR</p>
+            <p><strong>Total Payable:</strong> <span id="total">-</span> LKR</p>
+            <p><strong>Interest Rate:</strong> 8%</p>
+            <p><strong>Repayment Period:</strong> <span id="months">-</span> months</p>
         </div>
-      </div>
     </div>
 
-    <div class="right">
-      <div class="summary">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <div class="small" id="summaryTitle">Loan Summary</div>
-            <div class="small" id="summarySubtitle">Interest rate: 8% p.a.</div>
-          </div>
-          <div style="text-align:right">
-            <div class="small">Selected</div>
-            <div id="summaryAmount" style="font-weight:700">රු.50,000</div>
-          </div>
-        </div>
+    <script>
+        const loanAmountSlider = document.getElementById('loanAmount');
+        const amountDisplay = document.getElementById('amountDisplay');
+        const applyBtn = document.getElementById('applyBtn');
 
-        <div style="margin-top:12px" id="calcPreview">
-          <div class="small" id="estLabel">Estimated monthly</div>
-          <div style="font-size:22px;font-weight:700" id="monthlyPreview">රු.4,400</div>
-          <div class="small" id="totalPreview">Total to pay: රු.52,800</div>
-        </div>
+        const monthlyEl = document.getElementById('monthly');
+        const totalEl = document.getElementById('total');
+        const monthsEl = document.getElementById('months');
 
-        <div style="margin-top:14px" class="small">
-          <strong>Note:</strong> මේක estimator එකක්.
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+        const interestRate = 0.08; // 8%
 
-<script>
-/* Settings */
-const MAJOR_POINTS = [5000, 6000, 50000, 60000, 150000, 300000, 600000];
-const MIN = 5000, MAX = 600000;
-const STEP = 1000;
-const ANNUAL_RATE = 8.0;
+        function calculateLoan() {
+            const amount = parseInt(loanAmountSlider.value);
+            amountDisplay.textContent = amount;
 
-let currentLang = 'si';
+            let months;
+            if(amount === 5000){
+                months = 12;
+            } else if(amount >= 6000 && amount <= 50000){
+                months = 12;
+            } else if(amount >= 60000 && amount <= 150000){
+                months = 12;
+            } else if(amount >= 150001 && amount <= 300000){
+                months = 24;
+            } else if(amount >= 300001 && amount <= 600000){
+                months = 30;
+            }
 
-/* Elements */
-const amountRange = document.getElementById('amountRange');
-const amountDisplay = document.getElementById('amountDisplay');
-const amountNumber = document.getElementById('amountNumber');
-const termText = document.getElementById('termText');
-const summaryAmount = document.getElementById('summaryAmount');
-const monthlyPreview = document.getElementById('monthlyPreview');
-const totalPreview = document.getElementById('totalPreview');
-const ticksContainer = document.getElementById('ticksContainer');
-const codeInput = document.getElementById('codeInput');
+            const totalPayable = amount + (amount * interestRate);
+            const monthlyInstallment = totalPayable / months;
 
-/* Localization small set */
-const TEXTS = {
-  si:{ lead:"ඔබට අවශ්‍ය මුදල තෝරන්න", minmax:"රු.5,000 — රු.600,000", termMonths:(n)=> ${n} මාස, est:"Estimated monthly", totalToPay:(v)=> මුළු ගෙවිය යුතු මුදල: ${v}, note:"මේක estimator එකක්." },
-  en:{ lead:"Choose the amount you need", minmax:"LKR 5,000 — LKR 600,000", termMonths:(n)=> ${n} months, est:"Estimated monthly", totalToPay:(v)=> Total to pay: ${v}, note:"This is an estimator." }
-};
+            monthlyEl.textContent = monthlyInstallment.toFixed(2);
+            totalEl.textContent = totalPayable.toFixed(2);
+            monthsEl.textContent = months;
+        }
 
-/* Helpers */
-function formatRupee(v){
-  const n = Math.round(v);
-  const s = n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  return (currentLang==='si')? රු.${s} : LKR ${s};
-}
-function determineTerm(amount){
-  const a = Number(amount);
-  if(a === 5000) return 12;
-  if(a === 50000) return 5;
-  if(a >= 6000 && a <= 50000) return 12;
-  if(a >= 60000 && a <= 150000) return 12;
-  if(a > 150000 && a <= 300000) return 24;
-  if(a > 300000 && a <= 600000) return 30;
-  return 12;
-}
-function monthlyPayment(P, annualRatePercent, months){
-  const r = (annualRatePercent/100)/12;
-  const n = months;
-  if(r === 0) return P/n;
-  return (P * r * Math.pow(1+r,n)) / (Math.pow(1+r,n)-1);
-}
+        loanAmountSlider.addEventListener('input', calculateLoan);
+        applyBtn.addEventListener('click', calculateLoan);
 
-/* Render ticks */
-function renderTicks(){
-  ticksContainer.querySelectorAll('.tick').forEach(t=>t.remove());
-  const barRect = ticksContainer.getBoundingClientRect();
-  MAJOR_POINTS.forEach(pt => {
-    const percent = (pt - MIN) / (MAX - MIN) * 100;
-    const tick = document.createElement('div');
-    tick.className = 'tick';
-    tick.style.left = percent + '%';
-    ticksContainer.appendChild(tick);
-
-    const label = document.createElement('div');
-    label.className = 'tick-label';
-    label.style.left = percent + '%';
-    label.textContent = formatRupee(pt).replace(/^රු\./,'රු.'); // keep rupee format
-    ticksContainer.appendChild(label);
-  });
-}
-
-/* update all previews */
-function refreshAll(){
-  let amt = Number(amountRange.value);
-  // clamp
-  if(amt < MIN) amt = MIN;
-  if(amt > MAX) amt = MAX;
-  // ensure snapping to STEP
-  amt = Math.round(amt / STEP) * STEP;
-
-  amountRange.value = amt;
-  amountNumber.value = amt;
-  amountDisplay.textContent = formatRupee(amt);
-  summaryAmount.textContent = formatRupee(amt);
-
-  const term = determineTerm(amt);
-  termText.textContent = TEXTS[currentLang].termMonths(term);
-
-  const monthly = monthlyPayment(amt, ANNUAL_RATE, term);
-  const total = monthly * term;
-
-  monthlyPreview.textContent = formatRupee(monthly);
-  totalPreview.textContent = TEXTS[currentLang].totalToPay(formatRupee(total));
-}
-
-/* Snap-to-nearest-major (optional) */
-function snapToNearestMajor(){
-  const val = Number(amountRange.value);
-  // find nearest major point
-  let nearest = MAJOR_POINTS.reduce((a,b) => Math.abs(b-val) < Math.abs(a-val) ? b : a, MAJOR_POINTS[0]);
-  // ensure within bounds & step
-  nearest = Math.max(MIN, Math.min(MAX, Math.round(nearest/STEP)*STEP));
-  amountRange.value = nearest;
-  refreshAll();
-}
-
-/* Events */
-amountRange.addEventListener('input', ()=> refreshAll());
-amountNumber.addEventListener('change', ()=>{
-  let v = Number(amountNumber.value);
-  if(isNaN(v)) v = MIN;
-  if(v < MIN) v = MIN;
-  if(v > MAX) v = MAX;
-  // round to nearest step
-  v = Math.round(v/STEP) * STEP;
-  amountRange.value = v;
-  refreshAll();
-});
-document.getElementById('snapBtn').addEventListener('click', snapToNearestMajor);
-
-/* Apply / go to apply page (keeps simple alert) */
-document.getElementById('applyBtn').addEventListener('click', ()=>{
-  const amt = Number(amountRange.value);
-  const term = determineTerm(amt);
-  const monthly = monthlyPayment(amt, ANNUAL_RATE, term);
-  const total = monthly * term;
-  if(currentLang==='si'){
-    alert(ඔබ තෝරා ඇත: ${formatRupee(amt)}\nවිකල්පය: ${TEXTS.si.termMonths(term)}\nමාසික වාරිකය: ${formatRupee(monthly)}\nමුළු ගෙවිය යුතු මුදල: ${formatRupee(total)}\n\nCode: ${codeInput.value || '—'});
-  } else {
-    alert(Selected: ${formatRupee(amt)}\nTerm: ${TEXTS.en.termMonths(term)}\nMonthly: ${formatRupee(monthly)}\nTotal to pay: ${formatRupee(total)}\n\nCode: ${codeInput.value || '—'});
-  }
-});
-
-/* language toggle */
-document.getElementById('btn-si').addEventListener('click', ()=>{
-  currentLang = 'si';
-  document.getElementById('btn-si').style.backgroundColor = 'var(--accent)';
-  document.getElementById('btn-si').style.color = '#fff';
-  document.getElementById('btn-en').style.backgroundColor = '#fff';
-  document.getElementById('btn-en').style.color = '#000';
-  document.getElementById('lead').textContent = TEXTS.si.lead;
-  document.getElementById('minmax').textContent = TEXTS.si.minmax;
-  document.getElementById('summarySubtitle').textContent = 'Interest rate: 8% p.a.';
-  refreshAll();
-});
-document.getElementById('btn-en').addEventListener('click', ()=>{
-  currentLang = 'en';
-  document.getElementById('btn-en').style.backgroundColor = 'var(--accent)';
-  document.getElementById('btn-en').style.color = '#fff';
-  document.getElementById('btn-si').style.backgroundColor = '#fff';
-  document.getElementById('btn-si').style.color = '#000';
-  document.getElementById('lead').textContent = TEXTS.en.lead;
-  document.getElementById('minmax').textContent = TEXTS.en.minmax;
-  document.getElementById('summarySubtitle').textContent = 'Interest rate: 8% p.a.';
-  refreshAll();
-});
-
-/* initial */
-window.addEventListener('load', ()=>{
-  renderTicks();
-  refreshAll();
-  // re-render ticks on resize so labels align
-  window.addEventListener('resize', renderTicks);
-});
-</script>
+        // Initial calculation
+        calculateLoan();
+    </script>
 </body>
 </html>
