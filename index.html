@@ -336,102 +336,82 @@
     කිරීමට අපහසු නෑ...
   </p>
 <!-- Footer Section -->
-<footer class="sw-footer">
+<footer class="cl-footer">
   <style>
-    .sw-footer{
-      font-family:"Noto Sans Sinhala", system-ui, sans-serif;
-      background:#1b0f2e;
-      color:#eee;
+    .cl-footer{
+      font-family:"Noto Sans Sinhala",system-ui,sans-serif;
+      background:#fff;
+      color:#222;
       padding:clamp(20px,4vw,40px);
+      border-top:1px solid #eee;
     }
-    .sw-footer a{ color:#64b000; text-decoration:none }
-    .sw-footer a:hover{ text-decoration:underline }
-
-    .sw-contact{ margin-bottom:24px }
-    .sw-contact div{
-      display:flex; align-items:center; gap:10px;
-      margin:8px 0; font-size:15px;
-    }
-    .sw-contact svg{ flex:0 0 auto; width:18px; height:18px }
-
-    .sw-menus{ border-top:1px solid rgba(255,255,255,.1);
-      border-bottom:1px solid rgba(255,255,255,.1);
-      padding:16px 0; margin-bottom:16px;
-    }
-    .sw-menus details{ margin:10px 0 }
-    .sw-menus summary{
-      font-weight:700; cursor:pointer;
+    .cl-top{
       display:flex; justify-content:space-between;
-      align-items:center; font-size:16px;
+      align-items:center; margin-bottom:20px;
+      flex-wrap:wrap; gap:12px;
     }
-    .sw-menus summary::marker{ display:none; }
-    .sw-menus summary::-webkit-details-marker{ display:none; }
-    .sw-menus .dropdown{ margin-top:8px; margin-left:10px; font-size:14px; color:#bbb }
+    .cl-logo{ font-size:28px; font-weight:700; color:#555 }
+    .cl-logo span{ color:#000 }
+    .cl-social{ display:flex; gap:12px }
+    .cl-social a img{ width:30px; height:30px; border-radius:8px }
 
-    .sw-links{ display:flex; justify-content:space-between; font-size:14px; margin-bottom:14px }
-    .sw-links a{ color:#eee }
+    .cl-contacts{ margin-bottom:20px }
+    .cl-contacts div{
+      display:flex; align-items:center; gap:10px;
+      margin:8px 0; font-size:15px; color:#333;
+    }
+    .cl-contacts svg{ width:18px; height:18px; flex:0 0 auto }
 
-    .sw-copy{ font-size:14px; margin-bottom:14px; color:#aaa }
+    .cl-legal{ margin-bottom:20px }
+    .cl-legal h4{ font-weight:700; margin-bottom:8px }
+    .cl-legal a{
+      display:block; margin:4px 0; font-size:15px;
+      color:#555; text-decoration:none
+    }
+    .cl-legal a:hover{ text-decoration:underline }
 
-    .sw-legal{ font-size:13px; line-height:1.5; color:#888 }
-    
-    /* Mobile */
+    .cl-copy{ font-size:13px; color:#888; line-height:1.5 }
+
     @media(max-width:480px){
-      .sw-links{ flex-direction:column; gap:8px }
+      .cl-top{ flex-direction:column; align-items:flex-start }
     }
   </style>
 
-  <!-- Contact Info -->
-  <div class="sw-contact">
-    <div>
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a2 2 0 011.789 1.106l1.829 3.658a2 2 0 01-.45 2.354L10.414 12a16.017 16.017 0 006.586 6.586l1.882-1.034a2 2 0 012.354.45l3.658 1.829A2 2 0 0122 21.72V25a2 2 0 01-2 2h-1c-9.941 0-18-8.059-18-18V7a2 2 0 012-2z"/></svg>
-      <a href="tel:117358358">117358358</a>
-    </div>
-    <div>
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M16 12H8m8-6H8m8 12H8m-6-6V6a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2z"/></svg>
-      <a href="mailto:info@monigo.lk">info@monigo.lk</a>
-    </div>
-    <div>
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-      Mon - Sun: 8.30am to 5.30pm
+  <!-- Top section: logo + socials -->
+  <div class="cl-top">
+    <div class="cl-logo"><span>e</span>loan</div>
+    <div class="cl-social">
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" alt="Facebook"></a>
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" alt="LinkedIn"></a>
     </div>
   </div>
 
-  <!-- Dropdown Menus -->
-  <div class="sw-menus">
-    <details>
-      <summary>Company</summary>
-      <div class="dropdown">About Us</div>
-      <div class="dropdown">Careers</div>
-    </details>
-    <details>
-      <summary>Customer</summary>
-      <div class="dropdown">Support</div>
-      <div class="dropdown">FAQ</div>
-    </details>
-    <details>
-      <summary>Social</summary>
-      <div class="dropdown">Facebook</div>
-      <div class="dropdown">LinkedIn</div>
-    </details>
+  <!-- Contacts -->
+  <div class="cl-contacts">
+    <div>
+      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 4a2 2 0 012-2h16a2 2 0 012 2v1.5l-10 7-10-7V4z"/><path d="M22 6.5l-10 7-10-7V20a2 2 0 002 2h16a2 2 0 002-2V6.5z"/></svg>
+      <a href="mailto:info@cashloan.lk">info@cashloan.lk</a>
+    </div>
+    <div>
+      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Mon - Sat: 8 am - 5 pm
+    </div>
   </div>
 
-  <!-- Links -->
-  <div class="sw-links">
-    <a href="#">Terms and Conditions</a>
+  <!-- Legal & Resources -->
+  <div class="cl-legal">
+    <h4>Legal & Resources</h4>
     <a href="#">Privacy Policy</a>
+    <a href="#">Terms & Conditions</a>
+    <a href="#">Account Cancellation</a>
   </div>
 
   <!-- Copyright -->
-  <div class="sw-copy">© 2024 - 2025. All rights reserved</div>
-
-  <!-- Legal paragraph -->
-  <p class="sw-legal">
-    Monigo | S F Group (PRIVATE) LIMITED is a company duly incorporated and registered 
-    under the laws of Sri Lanka, with Company Registration No. PV 00221752 granted by 
-    Registrar General of Companies in Colombo. Company Address: No. 341/5, M & M Center, 
-    Level 01, Kotte road, Rajagiriya. The company is a subsidiary of SF CAPITAL SG PTE. LTD 
-    duly incorporated in Singapore under UEN...
+  <p class="cl-copy">
+    © 2025 All Rights Reserved. DIGITAL ONLINE SOLUTIONS (PVT) LTD is a company duly incorporated 
+    and registered under the laws of Sri Lanka, with a company registration no. PV XXXXX granted 
+    by the Registrar General of Companies in Colombo.
   </p>
 </footer>
   <!-- CTA -->
