@@ -342,44 +342,81 @@
       font-family:"Noto Sans Sinhala",system-ui,sans-serif;
       background:#fff;
       color:#222;
-      padding:clamp(20px,4vw,40px);
+      padding:20px;
       border-top:1px solid #eee;
     }
     .cl-top{
-      display:flex; justify-content:space-between;
-      align-items:center; margin-bottom:20px;
-      flex-wrap:wrap; gap:12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+      gap:12px;
     }
-    .cl-logo{ font-size:28px; font-weight:700; color:#555 }
-    .cl-logo span{ color:#000 }
-    .cl-social{ display:flex; gap:12px }
-    .cl-social a img{ width:30px; height:30px; border-radius:8px }
+    .cl-logo{
+      font-size:26px;
+      font-weight:700;
+      color:#000;
+    }
+    .cl-social{
+      display:flex;
+      gap:12px;
+    }
+    .cl-social a img{
+      width:30px;
+      height:30px;
+      border-radius:8px;
+    }
 
-    .cl-contacts{ margin-bottom:20px }
+    /* mobile ekata icons right-side yana fix */
+    @media(max-width:600px){
+      .cl-top{
+        flex-direction:row;
+      }
+      .cl-logo{
+        order:1;
+      }
+      .cl-social{
+        order:2;
+        margin-left:auto; /* icons yanawa right-ta */
+      }
+    }
+
+    .cl-contacts{
+      margin-bottom:20px;
+      font-size:15px;
+      color:#333;
+    }
     .cl-contacts div{
-      display:flex; align-items:center; gap:10px;
-      margin:8px 0; font-size:15px; color:#333;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin:6px 0;
     }
-    .cl-contacts svg{ width:18px; height:18px; flex:0 0 auto }
-
-    .cl-legal{ margin-bottom:20px }
-    .cl-legal h4{ font-weight:700; margin-bottom:8px }
+    .cl-legal{
+      margin-bottom:20px;
+    }
+    .cl-legal h4{
+      font-weight:700;
+      margin-bottom:6px;
+    }
     .cl-legal a{
-      display:block; margin:4px 0; font-size:15px;
-      color:#555; text-decoration:none
+      display:block;
+      margin:3px 0;
+      font-size:15px;
+      color:#555;
+      text-decoration:none;
     }
     .cl-legal a:hover{ text-decoration:underline }
-
-    .cl-copy{ font-size:13px; color:#888; line-height:1.5 }
-
-    @media(max-width:480px){
-      .cl-top{ flex-direction:column; align-items:flex-start }
+    .cl-copy{
+      font-size:13px;
+      color:#888;
+      line-height:1.5;
     }
   </style>
 
-  <!-- Top section: logo + socials -->
   <div class="cl-top">
-    <div class="cl-logo"><span>e</span>loan</div>
+    <div class="cl-logo">eloan</div>
     <div class="cl-social">
       <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
       <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" alt="Facebook"></a>
@@ -387,19 +424,11 @@
     </div>
   </div>
 
-  <!-- Contacts -->
   <div class="cl-contacts">
-    <div>
-      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M2 4a2 2 0 012-2h16a2 2 0 012 2v1.5l-10 7-10-7V4z"/><path d="M22 6.5l-10 7-10-7V20a2 2 0 002 2h16a2 2 0 002-2V6.5z"/></svg>
-      <a href="mailto:info@cashloan.lk">info@cashloan.lk</a>
-    </div>
-    <div>
-      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-      Mon - Sat: 8 am - 5 pm
-    </div>
+    <div>📧 <a href="mailto:info@cashloan.lk">info@cashloan.lk</a></div>
+    <div>⏰ Mon - Sat: 8 am - 5 pm</div>
   </div>
 
-  <!-- Legal & Resources -->
   <div class="cl-legal">
     <h4>Legal & Resources</h4>
     <a href="#">Privacy Policy</a>
@@ -407,7 +436,6 @@
     <a href="#">Account Cancellation</a>
   </div>
 
-  <!-- Copyright -->
   <p class="cl-copy">
     © 2025 All Rights Reserved. DIGITAL ONLINE SOLUTIONS (PVT) LTD is a company duly incorporated 
     and registered under the laws of Sri Lanka, with a company registration no. PV XXXXX granted 
