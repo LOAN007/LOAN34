@@ -166,25 +166,33 @@
     </div>
 </div>
 
-<!-- Extra Info Section -->
 <!-- Steps Widget (paste anywhere inside your page's <body>) -->
 <div class="sw-steps" role="region" aria-label="පියවර මාලාව">
   <style>
-    /* === Steps Widget Styles (scoped with .sw- prefix) === */
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;700;800&display=swap');
 
-    .sw-steps{ --sw-accent:#64b000; --sw-ink:#111; --sw-muted:#9aa0a6; --sw-card:#fafafa; --sw-max:760px; 
+    .sw-steps{
+      --sw-accent:#64b000; --sw-ink:#111; --sw-muted:#9aa0a6; --sw-card:#fafafa; --sw-max:760px; 
       font-family:"Noto Sans Sinhala", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--sw-ink); max-width:var(--sw-max); margin:auto; padding:clamp(12px,3vw,24px) }
-    .sw-title{ font-weight:800; font-size:clamp(26px,6vw,48px); margin:4px 0 16px }
+      color:var(--sw-ink); max-width:var(--sw-max); margin:auto; padding:clamp(12px,3vw,24px)
+    }
+    .sw-title{ font-weight:800; font-size:clamp(22px,5vw,44px); margin:4px 0 16px }
     .sw-group{ background:var(--sw-card); border-radius:18px; padding:clamp(12px,2.4vw,20px); box-shadow:0 1px 0 rgba(0,0,0,.04)}
     .sw-step{ padding:14px 0; border-top:1px solid #eee }
     .sw-step:first-child{ border-top:0 }
     .sw-head{ display:flex; gap:12px; align-items:flex-start }
     .sw-badge{ flex:0 0 auto; background:#eaf6d5; color:var(--sw-accent); border:2px solid var(--sw-accent);
       font-weight:800; padding:2px 10px; border-radius:999px; line-height:1.2; margin-top:4px }
-    .sw-stitle{ margin:0; font-weight:800; font-size:clamp(18px,3.6vw,30px) }
-    .sw-desc{ margin:6px 0 0; color:var(--sw-muted); font-size:clamp(14px,2.6vw,18px) }
+    .sw-stitle{ margin:0; font-weight:800; font-size:clamp(16px,3.2vw,26px) }
+    .sw-desc{ margin:6px 0 0; color:var(--sw-muted); font-size:clamp(13px,2.6vw,16px) }
+
+    /* 📱 Mobile screen font-size smaller */
+    @media (max-width:480px){
+      .sw-title{ font-size:20px }
+      .sw-stitle{ font-size:16px }
+      .sw-desc{ font-size:13px }
+      .sw-badge{ font-size:12px; padding:2px 8px }
+    }
   </style>
 
   <h2 class="sw-title">නයක් ලැබා ගැනීම පියවර!</h2>
@@ -193,7 +201,7 @@
     <div class="sw-step">
       <div class="sw-head">
         <span class="sw-badge">පියවර 1</span>
-        <h3 class="sw-stitle">ඔබගේ අයදුම්පත ඉදිරිපත් කරණ්න</h3>
+        <h3 class="sw-stitle">ඔබගේ අයදුම්පත ඉදිරිපත් කරන්න</h3>
       </div>
       <p class="sw-desc">ඔබගේ ඉල්ලීම යෙදීම සඳහා අයදුම්පත පුරවන්න</p>
     </div>
