@@ -3,506 +3,250 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AnyCash.lk Loan Calculator</title>
+<title>Loan X – Loan Calculator</title>
+
 <style>
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
-    body{background:#f5f5f5;display:flex;justify-content:center;align-items:center;min-height:100vh;flex-direction:column;padding-top:70px;}
-    .container{background:#fff;padding:25px;border-radius:20px;box-shadow:0 4px 15px rgba(0,0,0,0.1);width:90%;max-width:400px;text-align:center;display:none;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
+body{
+  background:#f5f5f5;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  flex-direction:column;
+  padding-top:80px;
+}
 
-    /* Top Navigation Bar */
-    .top-bar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background: white;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        z-index: 1000;
-    }
-    .logo {
-        font-size: 20px;
-        font-weight: bold;
-        color: #144d32;
-    }
-    .nav-actions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .login-btn {
-        background: #e8f9e6;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 14px;
-        color: #144d32;
-        font-weight: bold;
-    }
-    .lang-switch {
-        padding: 6px 10px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 14px;
-    }
+/* ===== Top Bar ===== */
+.top-bar{
+  position:fixed;
+  top:0;left:0;
+  width:100%;
+  background:#fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 20px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.1);
+  z-index:1000;
+}
+.logo{
+  font-size:22px;
+  font-weight:bold;
+  color:#144d32;
+}
+.login-btn{
+  background:#e8f9e6;
+  border:none;
+  padding:8px 16px;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    h2{margin-bottom:20px;font-size:20px;color:#333;}
-    .amount-box{
-        display:flex;align-items:center;justify-content:space-between;
-        background:#f3f5f1;border-radius:15px;padding:15px 20px;margin-bottom:15px;
-    }
-    .amount-box button{
-        background:#144d32;color:#fff;font-size:22px;border:none;
-        width:40px;height:40px;border-radius:50%;cursor:pointer;
-    }
-    .amount-display{font-size:20px;font-weight:bold;color:#333;}
-    input[type=range]{
-        width:100%;-webkit-appearance:none;height:6px;background:#144d32;border-radius:3px;
-        outline:none;margin:10px 0;
-    }
-    input[type=range]::-webkit-slider-thumb{
-        -webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;
-        background:#144d32;cursor:pointer;
-    }
-    .range-labels{display:flex;justify-content:space-between;font-size:14px;color:#777;}
+/* ===== Language Modal ===== */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.modal-content{
+  background:#fff;
+  padding:25px;
+  border-radius:15px;
+  text-align:center;
+}
+.lang-btn{
+  margin:10px;
+  padding:12px 20px;
+  border:none;
+  border-radius:8px;
+  background:#01b969;
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
 
-    /* Apply button */
-    .apply-btn{
-        display:flex;align-items:center;justify-content:center;
-        width:100%;padding:15px;margin-top:20px;
-        background:#c6f622;border:none;border-radius:12px;
-        font-size:18px;font-weight:bold;color:#111;cursor:pointer;
-    }
-    .apply-btn span.brand{
-        margin-right:auto;font-weight:bold;color:#144d32;font-size:16px;
-    }
-    .apply-btn span.text{margin-left:auto;}
-    .apply-btn:hover{background:#bef91d;}
-    .details{margin-top:20px;text-align:left;background:#f9f9f9;
-        padding:15px;border-radius:12px;font-size:14px;color:#333;}
-    .details p{margin:8px 0;}
+/* ===== Calculator ===== */
+.container{
+  background:#fff;
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+  width:90%;
+  max-width:400px;
+  text-align:center;
+  display:none;
+}
+h2{margin-bottom:20px;}
 
-    /* Extra info section */
-    .extra-info {
-        margin-top:30px;
-        padding:20px;
-        background:#fff;
-        border-radius:15px;
-        box-shadow:0 2px 8px rgba(0,0,0,0.1);
-        text-align:left;
-        max-width:400px;
-        width:90%;
-    }
-    .extra-info h3 {color:#144d32;margin-bottom:10px;}
-    .extra-info p {font-size:14px;color:#333;}
+.amount-box{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#f3f5f1;
+  padding:15px;
+  border-radius:15px;
+}
+.amount-box button{
+  width:40px;height:40px;
+  border-radius:50%;
+  border:none;
+  background:#144d32;
+  color:#fff;
+  font-size:20px;
+  cursor:pointer;
+}
+.amount-display{
+  font-size:20px;
+  font-weight:bold;
+}
 
-    /* Fade-in Scroll Animation */
-    .hidden { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-    .show { opacity: 1; transform: translateY(0); }
+input[type=range]{
+  width:100%;
+  margin:15px 0;
+}
 
-    /* Language Modal */
-    .modal{position:fixed;top:0;left:0;width:100%;height:100%;
-        background:rgba(0,0,0,0.6);display:flex;justify-content:center;align-items:center;}
-    .modal-content{background:#fff;padding:20px 30px;border-radius:15px;text-align:center;}
-    .lang-btn{margin:10px;padding:12px 20px;border:none;border-radius:8px;background:#01eb76;color:#fff;font-size:16px;cursor:pointer;}
-    .lang-btn:hover{background:#01b969;}
+.apply-btn{
+  width:100%;
+  padding:15px;
+  margin-top:20px;
+  background:#c6f622;
+  border:none;
+  border-radius:12px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.apply-btn:hover{background:#bef91d;}
+
+.details{
+  margin-top:20px;
+  background:#f9f9f9;
+  padding:15px;
+  border-radius:12px;
+  text-align:left;
+}
+
+/* ===== Footer ===== */
+.footer{
+  background:#fff;
+  width:100%;
+  margin-top:40px;
+  padding:20px;
+  border-top:1px solid #eee;
+}
+.footer h2{
+  color:#144d32;
+}
+.footer-section{
+  margin-top:15px;
+}
+.footer-bottom{
+  margin-top:15px;
+  font-size:12px;
+  color:#777;
+}
 </style>
 </head>
+
 <body>
 
-<!-- Top Navigation Bar -->
+<!-- ===== Top Bar ===== -->
 <div class="top-bar">
-  <div class="logo">AnyCash.lk</div>
-  <div class="nav-actions">
-    <button class="login-btn">Log in</button>
-    <select class="lang-switch" onchange="setLanguage(this.value)">
-      <option value="en">EN</option>
-      <option value="si">සිං</option>
-    </select>
-  </div>
+  <div class="logo">Loan X</div>
+  <button class="login-btn">Log in</button>
 </div>
 
-<!-- Language Selector Modal -->
+<!-- ===== Language Modal ===== -->
 <div class="modal" id="langModal">
   <div class="modal-content">
-    <h3>Please Select Language / කරුණාකර භාෂාව තෝරන්න</h3>
+    <h3>Select Language / භාෂාව තෝරන්න</h3>
     <button class="lang-btn" onclick="setLanguage('en')">English</button>
     <button class="lang-btn" onclick="setLanguage('si')">සිංහල</button>
   </div>
 </div>
 
-<!-- Loan Calculator UI -->
+<!-- ===== Loan Calculator ===== -->
 <div class="container" id="mainContainer">
-    <h2 id="title">Fast online loan up to <span style="color:#5cb85c;">600 000 RS</span>!</h2>
-    <label id="loanLabel">Loan amount</label>
-    <div class="amount-box">
-        <button id="decrease">−</button>
-        <span class="amount-display" id="amountDisplay">40 000 RS</span>
-        <button id="increase">+</button>
-    </div>
-    <input type="range" id="loanAmount" min="40000" max="600000" step="10000" value="40000">
-    <div class="range-labels">
-        <span>40 000 RS</span>
-        <span>600 000 RS</span>
-    </div>
+  <h2 id="title">Fast online loan up to 600,000 RS</h2>
 
-    <!-- Apply button with link -->
-    <a href="https://anycash.lk/apply" style="text-decoration:none;">
-        <button class="apply-btn" id="applyBtn">
-            <span class="brand">AnyCash.lk</span>
-            <span class="text">Take a loan</span>
-        </button>
-    </a>
+  <label id="loanLabel">Loan Amount</label>
+  <div class="amount-box">
+    <button id="decrease">−</button>
+    <span class="amount-display" id="amountDisplay">40,000 RS</span>
+    <button id="increase">+</button>
+  </div>
 
-    <div class="details" id="loanDetails">
-        <p><strong id="monthlyLabel">Monthly Installment:</strong> <span id="monthly">-</span> RS</p>
-        <p><strong id="totalLabel">Total Payable:</strong> <span id="total">-</span> RS</p>
-        <p><strong id="rateLabel">Interest Rate:</strong> 8% per year</p>
-        <p><strong id="periodLabel">Repayment Period:</strong> <span id="months">-</span> months</p>
-    </div>
+  <input type="range" id="loanAmount" min="40000" max="600000" step="10000" value="40000">
+
+  <a href="#">
+    <button class="apply-btn">
+      Loan X – Take a Loan
+    </button>
+  </a>
+
+  <div class="details">
+    <p><strong>Monthly Installment:</strong> <span id="monthly">-</span></p>
+    <p><strong>Total Payable:</strong> <span id="total">-</span></p>
+    <p><strong>Interest Rate:</strong> 8% per year</p>
+    <p><strong>Repayment Period:</strong> <span id="months">-</span></p>
+  </div>
 </div>
 
-<!-- Extra Info Section -->
-<!-- Steps Widget (paste anywhere inside your page's <body>) -->
-<div class="sw-steps" role="region" aria-label="පියවර මාලාව">
-  <style>
-    /* === Steps Widget Styles (scoped with .sw- prefix) === */
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;700;800&display=swap');
-
-    .sw-steps{ --sw-accent:#64b000; --sw-ink:#111; --sw-muted:#9aa0a6; --sw-card:#fafafa; --sw-max:760px; 
-      font-family:"Noto Sans Sinhala", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--sw-ink); max-width:var(--sw-max); margin:auto; padding:clamp(12px,3vw,24px) }
-    .sw-title{ font-weight:800; font-size:clamp(26px,6vw,48px); margin:4px 0 16px }
-    .sw-group{ background:var(--sw-card); border-radius:18px; padding:clamp(12px,2.4vw,20px); box-shadow:0 1px 0 rgba(0,0,0,.04)}
-    .sw-step{ padding:14px 0; border-top:1px solid #eee }
-    .sw-step:first-child{ border-top:0 }
-    .sw-head{ display:flex; gap:12px; align-items:flex-start }
-    .sw-badge{ flex:0 0 auto; background:#eaf6d5; color:var(--sw-accent); border:2px solid var(--sw-accent);
-      font-weight:800; padding:2px 10px; border-radius:999px; line-height:1.2; margin-top:4px }
-    .sw-stitle{ margin:0; font-weight:800; font-size:clamp(18px,3.6vw,30px) }
-    .sw-desc{ margin:6px 0 0; color:var(--sw-muted); font-size:clamp(14px,2.6vw,18px) }
-  </style>
-
-  <h2 class="sw-title">නයක් ලැබා ගැනීම පියවර!</h2>
-
-  <div class="sw-group">
-    <div class="sw-step">
-      <div class="sw-head">
-        <span class="sw-badge">පියවර 1</span>
-        <h3 class="sw-stitle">ඔබගේ අයදුම්පත ඉදිරිපත් කරණ්න</h3>
-      </div>
-      <p class="sw-desc">ඔබගේ ඉල්ලීම යෙදීම සඳහා අයදුම්පත පුරවන්න</p>
-    </div>
-
-    <div class="sw-step">
-      <div class="sw-head">
-        <span class="sw-badge">පියවර 2</span>
-        <h3 class="sw-stitle">ඉක්මන් ප්‍රතිචාරයක් ලබා ගැනීම</h3>
-      </div>
-      <p class="sw-desc">තීරණ ගැනීම සඳහා ගතවන වේලාවක් පමණි</p>
-    </div>
-
-    <div class="sw-step">
-      <div class="sw-head">
-        <span class="sw-badge">පියවර 3</span>
-        <h3 class="sw-stitle">ඔබේ මුදල් ලබා විදිනී</h3>
-      </div>
-      <p class="sw-desc">මුදල ඔබගේ බැංකු ගිණුමට බැර කිරීම ලැබේ</p>
-    </div>
-  </div>
-</div>
-
-<!-- Loan Step with Image -->
-<div class="sw-loan-block">
-  <style>
-    .sw-loan-block{
-      font-family:"Noto Sans Sinhala", system-ui, sans-serif;
-      max-width:760px; margin:auto; padding:clamp(12px,3vw,24px);
-      color:#111;
-    }
-    .sw-ltitle{ font-size:clamp(22px,5vw,40px); font-weight:800; margin:0 0 6px }
-    .sw-lsub{ font-size:clamp(14px,3vw,18px); color:#666; margin:0 0 14px }
-
-    .sw-lwrap{ position:relative; border-radius:18px; overflow:hidden; }
-    .sw-lwrap img{ width:100%; display:block; height:auto; }
-
-    .sw-lcard{
-      position:absolute; left:12px; bottom:12px; right:12px;
-      background:rgba(255,255,255,0.96);
-      backdrop-filter:blur(6px);
-      border-radius:12px;
-      padding:10px 14px;
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px; box-shadow:0 3px 6px rgba(0,0,0,0.08);
-    }
-    .sw-linfo{ display:flex; align-items:center; gap:10px; }
-    .sw-linfo img{ width:38px; height:38px; border-radius:50%; flex:0 0 auto; }
-    .sw-ltxt h4{ font-size:16px; font-weight:700; margin:0 }
-    .sw-ltxt p{ font-size:13px; color:#777; margin:0 }
-
-    .sw-lamount{ font-size:17px; font-weight:700; white-space:nowrap }
-    
-    /* Mobile fonts smaller */
-    @media(max-width:480px){
-      .sw-ltitle{ font-size:20px }
-      .sw-lsub{ font-size:13px }
-      .sw-ltxt h4{ font-size:14px }
-      .sw-ltxt p{ font-size:12px }
-      .sw-lamount{ font-size:15px }
-    }
-  </style>
-
-  <h2 class="sw-ltitle">ඔබේ මුදල් හුක්ති විදින්න</h2>
-  <p class="sw-lsub">මුදල ඔබගේ බැංකු ගිණුමට බැර කරනු ලැබේ</p>
-
-  <div class="sw-lwrap">
-    <!-- Replace this with your own image -->
-    <img src="https://i.ibb.co/VW4bbDhR/Whats-App-Image-2025-09-06-at-16-22-47-ae0363b1.jpg" alt="Loan Success">
-
-    <div class="sw-lcard">
-      <div class="sw-linfo">
-        <!-- Small logo/avatar -->
-        <img src="https://i.ibb.co/hx6sVQ88/cat-head-kitten-symbol-gaming-cat-logo-elegant-element-for-brand-abstract-icon-symbols-vector.jpg" alt="logo">
-        <div class="sw-ltxt">
-          <h4>වාමිනි ප්‍රනාන්දු</h4>
-          <p>cashloan වෙතින් ගිණුමගත කරණ ලදී</p>
-        </div>
-      </div>
-      <div class="sw-lamount">+ 120 000 RS</div>
-    </div>
-  </div>
-</div>
-<!-- Terms & Marketing Block -->
-<div class="sw-terms">
-  <style>
-    .sw-terms{
-      font-family:"Noto Sans Sinhala", system-ui, sans-serif;
-      max-width:760px; margin:auto; padding:clamp(14px,3vw,28px);
-      color:#111;
-    }
-    .sw-disclaimer{
-      font-size:clamp(12px,2.6vw,14px);
-      color:#888; line-height:1.6; margin-bottom:18px;
-    }
-    .sw-main-title{
-      font-size:clamp(22px,5vw,36px);
-      font-weight:800;
-      margin:0 0 16px;
-    }
-    .sw-text{
-      font-size:clamp(14px,3vw,18px);
-      color:#444;
-      line-height:1.7;
-      margin:0 0 14px;
-    }
-    .sw-cta{
-      font-size:clamp(14px,3vw,18px);
-      font-weight:700;
-      color:#2e5e32;
-      margin-top:12px;
-    }
-
-    /* Mobile tweaks */
-    @media(max-width:480px){
-      .sw-main-title{ font-size:20px }
-      .sw-text{ font-size:13px }
-      .sw-cta{ font-size:14px }
-    }
-  </style>
-
-  <!-- Disclaimer top -->
-  <p class="sw-disclaimer">
-    නියෝජිත නියම උදාහරණය: ඔබ රු. 10,000.00ක් සඳහා අයදුම් කරන අයත දින 360 ක් පුරා 
-    සුළුපසු අයසු ගෙවීමක් තෝරා ගන්නේ නම්, පොලි අනුපාතය දිනකට 8% කි...
-  </p>
-
-  <!-- Main heading -->
-  <h2 class="sw-main-title">
-    ශ්‍රී ලංකාව ඇතුලත රු. 600,000 දක්වා ඉක්මන් මාර්ගගත නයයක් ලබා ගන්න!
-  </h2>
-
-  <!-- Paragraphs -->
-  <p class="sw-text">
-    ශ්‍රී ලංකාව ඇතුලත ඔබට ඉක්මන් මාර්ගගත ණයක් ලබා ගත හැකි ස්ථානයක් වන Anycash.lk වෙත සාදරයෙන් පිළිගනිමු. ඔබට හදිසියේම මුදල් අවශ්‍ය වූ නමුත් ණයට ගැනීමට කිසිවෙකු නොමැති වීම බොහෝ විට සිදු වේ. එබැවින් ඒ සඳහා උදව් කිරීමට අපි මෙහි සිටිමු! ඔබට අමතර චෙක්පත් සඳහා රැඳී සිටීමට හෝ ලේඛන ටොන් ගණනක් පිරවීමට අවශ්‍ය නැත – සරල අයදුම්පතක් පමණක් සම්පුර්ණ කර ඔබේ මාර්ගගත ණය මිනිත්තු කිහිපයක් ඇතුළත ක්‍රියාන්විත කරගන්න.
-
-  </p>
-
-  <p class="sw-text">
-    එවැනි අවස්ථාදීදීත් සදහා ඔබට රුදී සීමාම නෝ ලේබල් තෝරා ගැසීමක්
-    කිරීමට අපහසු නෑ...
-  </p>
-<!-- Other content of your site -->
+<!-- ===== Footer ===== -->
 <footer class="footer">
-  <div class="footer-top">
-    <div class="footer-left">
-      <h2 class="logo">AnyCash.lk</h2>
-    </div>
-    <div class="footer-right">
-      <a href="https://www.facebook.com/share/1EdPAcE9JT/"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
-      <a href="https://www.facebook.com/share/1EdPAcE9JT/"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook"></a>
-      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn"></a>
-    </div>
-  </div>
+  <h2>Loan X</h2>
 
   <div class="footer-section">
-    <h4>Contacts</h4>
-    <p>📧 <a href="mailto:info@anycash.lk">info@anycash.lk</a></p>
-    <p>📞 <a href="072 4400033">072 4400033</a></p>
-    <p>⏰ Mon - Sat: 8 am - 7 pm</p>
-  </div>
-
-  <div class="footer-section">
-    <h4>Legal & Resources</h4>
-    <a href="#">Privacy Policy</a><br>
-    <a href="#">Terms & Conditions</a><br>
-    <a href="#">Account Cancellation</a>
+    <p>📞 <a href="tel:0742968131">074 296 8131</a></p>
+    <p>📍 78/3 Kandy – Colombo Road, Kegalla</p>
+    <p>⏰ Open Time: 8.00 AM – 9.00 PM</p>
   </div>
 
   <div class="footer-bottom">
-    <p>© 2025 All Rights Reserved. <br>
-    DIGITAL ONLINE SOLUTIONS (PVT) LTD is a company duly incorporated and registered under the laws of Sri Lanka, with a company registration no. PV 84395673 granted by the Registrar General of Companies in Nugegoda.</p>
+    © 2025 Loan X. All Rights Reserved.
   </div>
 </footer>
 
-<style>
-.footer {
-  background: #fff;
-  color: #222;
-  font-family: Arial, sans-serif;
-  padding: 20px;
-  border-top: 1px solid #eee;
-  font-size: 14px;
-}
-.footer-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.footer-left .logo {
-  font-size: 22px;
-  font-weight: bold;
-  color: #333;
-}
-.footer-right a img {
-  width: 28px;
-  margin-left: 10px;
-}
-.footer-section {
-  margin-top: 20px;
-}
-.footer-section h4 {
-  margin-bottom: 8px;
-  font-size: 15px;
-  font-weight: bold;
-}
-.footer-section a {
-  color: #444;
-  text-decoration: none;
-}
-.footer-section a:hover {
-  text-decoration: underline;
-}
-.footer-bottom {
-  margin-top: 20px;
-  font-size: 12px;
-  color: #777;
-  line-height: 1.5;
-}
-</style>
 <script>
-const langModal = document.getElementById('langModal');
-const mainContainer = document.getElementById('mainContainer');
+const modal=document.getElementById("langModal");
+const container=document.getElementById("mainContainer");
+const slider=document.getElementById("loanAmount");
+const amountDisplay=document.getElementById("amountDisplay");
+const monthly=document.getElementById("monthly");
+const total=document.getElementById("total");
+const months=document.getElementById("months");
 
-let currentLang = 'en';
-const translations = {
-    en: {
-        title: "Fast online loan up to 600 000 RS!",
-        loanLabel: "Loan amount",
-        applyBtn: "Take a loan",
-        monthlyLabel: "Monthly Installment:",
-        totalLabel: "Total Payable:",
-        rateLabel: "Interest Rate:",
-        periodLabel: "Repayment Period:",
-        monthsText: "months"
-    },
-    si: {
-        title: "ඔබට අවශ්‍ය මුදල තෝරා පහලින් අයදුම් කරන්න 600 000 රු. දක්වා!",
-        loanLabel: "ණය මුදල",
-        applyBtn: "ණය අයදුම් කරන්න",
-        monthlyLabel: "මාසික ගෙවීම:",
-        totalLabel: "මුළු ගෙවිය යුතු මුදල:",
-        rateLabel: "පොළී අනුපාතය:",
-        periodLabel: "ගෙවීම් කාලය:",
-        monthsText: "මාස"
-    }
-};
+const rate=0.08;
 
-function setLanguage(lang){
-    currentLang = lang;
-    langModal.style.display = "none";
-    mainContainer.style.display = "block";
-
-    const t = translations[lang];
-    document.getElementById('title').textContent = t.title;
-    document.getElementById('loanLabel').textContent = t.loanLabel;
-    document.querySelector('.apply-btn .text').textContent = t.applyBtn;
-    document.getElementById('monthlyLabel').textContent = t.monthlyLabel;
-    document.getElementById('totalLabel').textContent = t.totalLabel;
-    document.getElementById('rateLabel').textContent = t.rateLabel;
-    document.getElementById('periodLabel').childNodes[0].textContent = t.periodLabel + " ";
-    calculateLoan();
+function setLanguage(){
+  modal.style.display="none";
+  container.style.display="block";
+  calculateLoan();
 }
-
-// Loan Calculation
-const loanAmountSlider = document.getElementById('loanAmount');
-const amountDisplay = document.getElementById('amountDisplay');
-const monthlyEl = document.getElementById('monthly');
-const totalEl = document.getElementById('total');
-const monthsEl = document.getElementById('months');
-const increaseBtn = document.getElementById('increase');
-const decreaseBtn = document.getElementById('decrease');
-const interestRate = 0.08;
-
-function formatCurrency(num){ return num.toLocaleString('en-LK'); }
 
 function calculateLoan(){
-    const amount = parseInt(loanAmountSlider.value);
-    let months;
-    if(amount <= 60000){ months = 6; }
-    else if(amount <= 70000){ months = 9; }
-    else if(amount <= 100000){ months = 12; }
-    else if(amount <= 200000){ months = 16; }
-    else if(amount <= 300000){ months = 20; }
-    else if(amount <= 200000){ months = 28; }
-    else if(amount <= 400000){ months = 29; }
-    else { months = 30; }
+  let amount=parseInt(slider.value);
+  let period=amount<=100000?12:24;
 
-    const totalInterest = amount * interestRate * (months/12);
-    const totalPayable = amount + totalInterest;
-    const monthlyInstallment = totalPayable / months;
+  let interest=amount*rate*(period/12);
+  let totalPay=amount+interest;
+  let monthlyPay=totalPay/period;
 
-    amountDisplay.textContent = formatCurrency(amount) + " RS";
-    monthlyEl.textContent = formatCurrency(monthlyInstallment.toFixed(2));
-    totalEl.textContent = formatCurrency(totalPayable.toFixed(2));
-    monthsEl.textContent = months + " " + translations[currentLang].monthsText;
+  amountDisplay.textContent=amount.toLocaleString()+" RS";
+  monthly.textContent=monthlyPay.toFixed(2)+" RS";
+  total.textContent=totalPay.toFixed(2)+" RS";
+  months.textContent=period+" months";
 }
 
-loanAmountSlider.addEventListener('input', calculateLoan);
-increaseBtn.addEventListener('click', ()=>{let val=parseInt(loanAmountSlider.value);if(val<600000){val+=1000;}loanAmountSlider.value=val;calculateLoan();});
-decreaseBtn.addEventListener('click', ()=>{let val=parseInt(loanAmountSlider.value);if(val>5000){val-=1000;}loanAmountSlider.value=val;calculateLoan();});
-
-// Scroll Animation for Extra Info
-const extraInfo = document.getElementById("extraInfo");
-window.addEventListener("scroll", () => {
-  const rect = extraInfo.getBoundingClientRect();
-  if (rect.top < window.innerHeight - 100) {
-    extraInfo.classList.add("show");
-  }
-});
+slider.addEventListener("input",calculateLoan);
+document.getElementById("increase").onclick=()=>{slider.value=parseInt(slider.value)+10000;calculateLoan();}
+document.getElementById("decrease").onclick=()=>{slider.value=parseInt(slider.value)-10000;calculateLoan();}
 </script>
+
 </body>
 </html>
